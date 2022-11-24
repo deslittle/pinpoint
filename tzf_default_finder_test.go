@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"testing"
 
-	gocitiesjson "github.com/ringsaturn/go-cities.json"
-	"github.com/ringsaturn/tzf"
+	gocitiesjson "github.com/deslittle/go-cities.json"
+	"github.com/deslittle/tzf"
 )
 
 var (

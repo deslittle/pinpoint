@@ -24,11 +24,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/deslittle/tzf/convert"
+	"github.com/deslittle/tzf/pb"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/maptile"
 	"github.com/paulmach/orb/maptile/tilecover"
-	"github.com/ringsaturn/tzf/convert"
-	"github.com/ringsaturn/tzf/pb"
 	"github.com/tidwall/geojson/geometry"
 	"golang.org/x/exp/maps"
 )

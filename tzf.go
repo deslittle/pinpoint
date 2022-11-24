@@ -10,9 +10,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/ringsaturn/tzf/convert"
-	"github.com/ringsaturn/tzf/pb"
-	"github.com/ringsaturn/tzf/reduce"
+	"github.com/deslittle/tzf/convert"
+	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/tzf/reduce"
 	"github.com/tidwall/geojson/geometry"
 	"github.com/tidwall/rtree"
 )
@@ -25,7 +25,7 @@ type Option struct {
 
 type OptionFunc = func(opt *Option)
 
-// SetDropPBTZ will make Finder not save [github.com/ringsaturn/tzf/pb.Timezone] in memory
+// SetDropPBTZ will make Finder not save [github.com/deslittle/tzf/pb.Timezone] in memory
 func SetDropPBTZ(opt *Option) {
 	opt.DropPBTZ = true
 }
@@ -202,7 +202,7 @@ func getRTreeRangeShifed(lng float64, lat float64) float64 {
 func (f *Finder) getItemInRanges(lng float64, lat float64) []*tzitem {
 	candicates := []*tzitem{}
 
-	// TODO(ringsaturn): fix this range
+	// TODO(deslittle): fix this range
 	shifted := getRTreeRangeShifed(lng, lat)
 	f.tr.Search([2]float64{lng - shifted, lat - shifted}, [2]float64{lng + shifted, lat + shifted}, func(min, max [2]float64, data *tzitem) bool {
 		candicates = append(candicates, data)

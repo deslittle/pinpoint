@@ -3,8 +3,8 @@ package convert
 import (
 	"fmt"
 
+	"github.com/deslittle/tzf/pb"
 	"github.com/mitchellh/mapstructure"
-	"github.com/ringsaturn/tzf/pb"
 )
 
 const (

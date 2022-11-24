@@ -3,7 +3,7 @@ package reduce
 import (
 	"fmt"
 
-	"github.com/ringsaturn/tzf/pb"
+	"github.com/deslittle/tzf/pb"
 	"github.com/twpayne/go-polyline"
 )
 

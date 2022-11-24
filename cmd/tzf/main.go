@@ -5,9 +5,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/ringsaturn/tzf"
-	tzfrel "github.com/ringsaturn/tzf-rel"
-	"github.com/ringsaturn/tzf/pb"
+	"github.com/deslittle/tzf"
+	tzfrel "github.com/deslittle/tzf-rel"
+	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 

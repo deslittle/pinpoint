@@ -1,11 +1,11 @@
-# TZF: a fast timezone finder for Go. [![Go Reference](https://pkg.go.dev/badge/github.com/ringsaturn/tzf.svg)](https://pkg.go.dev/github.com/ringsaturn/tzf)
+# TZF: a fast timezone finder for Go. [![Go Reference](https://pkg.go.dev/badge/github.com/deslittle/tzf.svg)](https://pkg.go.dev/github.com/deslittle/tzf)
 
-![](https://github.com/ringsaturn/tzf/blob/gh-pages/docs/tzf-social-media.png?raw=true)
+![](https://github.com/deslittle/tzf/blob/gh-pages/docs/tzf-social-media.png?raw=true)
 
 NOTE: This package is also available in:
 
-- Rust, see [tzf-rs](https://github.com/ringsaturn/tzf-rs).
-- Python, see [tzfpy](https://github.com/ringsaturn/tzfpy)
+- Rust, see [tzf-rs](https://github.com/deslittle/tzf-rs).
+- Python, see [tzfpy](https://github.com/deslittle/tzfpy)
 
 ## Quick Start
 
@@ -18,7 +18,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ringsaturn/tzf"
+	"github.com/deslittle/tzf"
 )
 
 func main() {
@@ -39,9 +39,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/ringsaturn/tzf"
-	tzfrel "github.com/ringsaturn/tzf-rel"
-	"github.com/ringsaturn/tzf/pb"
+	"github.com/deslittle/tzf"
+	tzfrel "github.com/deslittle/tzf-rel"
+	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -62,7 +62,7 @@ func main() {
 ### CLI Tool
 
 ```bash
-go install github.com/ringsaturn/tzf/cmd/tzf@latest
+go install github.com/deslittle/tzf/cmd/tzf@latest
 tzf -lng 116.3883 -lat 39.9289
 ```
 
@@ -71,7 +71,7 @@ tzf -lng 116.3883 -lat 39.9289
 Original data download from
 <https://github.com/evansiroky/timezone-boundary-builder> .
 
-Preprocessed probuf data can get from <https://github.com/ringsaturn/tzf-rel>
+Preprocessed probuf data can get from <https://github.com/deslittle/tzf-rel>
 which has Go's `embed` support. Those files are Protocol Buffers messages for
 more efficiency binary distribution like Python wheels, you can view
 the [`pb/tzinfo.proto`](./pb/tzinfo.proto) or it's [HTML format docs][pb_html]
@@ -120,12 +120,12 @@ The [preindex data(~1.78MB)][preindex-link] are many tiles.
 It's used inside the `DefaultFinder`, which built on `FuzzyFinder`, to reduce
 raycasting algorithm execution times.
 
-[pb_html]: https://ringsaturn.github.io/tzf/pb.html
-[full-link]: https://github.com/ringsaturn/tzf-rel/blob/main/combined-with-oceans.pb
-[lite-link]: https://github.com/ringsaturn/tzf-rel/blob/main/combined-with-oceans.reduce.pb
-[preindex-link]: https://github.com/ringsaturn/tzf-rel/blob/main/combined-with-oceans.reduce.preindex.pb
-[compressd-link]: https://github.com/ringsaturn/tzf-rel/blob/main/combined-with-oceans.reduce.compress.pb
-[points_not_equal]: https://geojson.io/#id=gist:ringsaturn/2d958e7f0a279a7411c04907f255955a
+[pb_html]: https://deslittle.github.io/tzf/pb.html
+[full-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.pb
+[lite-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.reduce.pb
+[preindex-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.reduce.preindex.pb
+[compressd-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.reduce.compress.pb
+[points_not_equal]: https://geojson.io/#id=gist:deslittle/2d958e7f0a279a7411c04907f255955a
 
 ## Performance
 
@@ -143,12 +143,12 @@ Here is what have been done for performance improvements:
 
 That's all. There is no black magics inside package tzf.
 
-Benchmark run version <https://github.com/ringsaturn/tzf/releases/tag/v0.10.0>
+Benchmark run version <https://github.com/deslittle/tzf/releases/tag/v0.10.0>
 
 ```
 goos: darwin
 goarch: amd64
-pkg: github.com/ringsaturn/tzf
+pkg: github.com/deslittle/tzf
 cpu: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
 BenchmarkDefaultFinder_GetTimezoneName_Random_WorldCities-16    	  443942	      2583 ns/op
 BenchmarkFuzzyFinder_GetTimezoneName_Random_WorldCities-16      	 1580524	       769.3 ns/op
@@ -159,25 +159,25 @@ BenchmarkFullFinder_GetTimezoneName-16                          	  164649	      
 BenchmarkFullFinder_GetTimezoneNameAtEdge-16                    	  136508	      9382 ns/op
 BenchmarkFullFinder_GetTimezoneName_Random_WorldCities-16       	   91137	     12385 ns/op
 PASS
-ok  	github.com/ringsaturn/tzf	19.073s
+ok  	github.com/deslittle/tzf	19.073s
 ```
 
-- <https://ringsaturn.github.io/tzf/>:
+- <https://deslittle.github.io/tzf/>:
   Continuous Benchmark Result
-- <https://ringsaturn.github.io/tz-benchmark/>
+- <https://deslittle.github.io/tz-benchmark/>
   Continuous Benchmark Compared with other packages
 
 ## Related Repos
 
-- <https://github.com/ringsaturn/tzf-rel>
+- <https://github.com/deslittle/tzf-rel>
   Preprocessed probuf data release repo
-- <https://github.com/ringsaturn/tzf-server>
+- <https://github.com/deslittle/tzf-server>
   HTTP Server for debug
-- <https://github.com/ringsaturn/tz-benchmark>
+- <https://github.com/deslittle/tz-benchmark>
   Continuous Benchmark Compared with other packages
-- <https://github.com/ringsaturn/tzf-rs>
+- <https://github.com/deslittle/tzf-rs>
   Rust port of tzf
-- <https://github.com/ringsaturn/tzfpy>
+- <https://github.com/deslittle/tzfpy>
   Rust port's Python binding
 
 ## Thanks

@@ -1,1 +1,1 @@
-Move to <https://github.com/ringsaturn/tzfpy>
+Move to <https://github.com/deslittle/tzfpy>

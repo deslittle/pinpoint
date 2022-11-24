@@ -3,8 +3,8 @@ package tzf
 import (
 	"runtime"
 
-	tzfrel "github.com/ringsaturn/tzf-rel"
-	"github.com/ringsaturn/tzf/pb"
+	tzfrel "github.com/deslittle/tzf-rel"
+	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "github.com/ringsaturn/tzf/pb;pb";
+option go_package = "github.com/deslittle/tzf/pb;pb";
 
 // Basic Point data define.
 message Point {

@@ -1,3 +1,3 @@
 # TZF's Proto
 
-[Probuf define](https://ringsaturn.github.io/tzf/pb.html)
+[Probuf define](https://deslittle.github.io/tzf/pb.html)
