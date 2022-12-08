@@ -2,10 +2,8 @@ package pinpoint_test
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
 
-	gocitiesjson "github.com/deslittle/go-cities.json"
 	pinpoint "github.com/deslittle/pinpoint"
 )
 
@@ -32,7 +30,8 @@ func ExampleDefaultFinder_GetLocationName() {
 
 func BenchmarkDefaultFinder_GetLocationName_Random_WorldCities(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
-		p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
+		//p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
+		p := struct{ Lat, Lng float64 }{Lat: 40.0786, Lng: 116.6386}
 		_ = defaultFinder.GetLocationName(p.Lng, p.Lat)
 	}
 }

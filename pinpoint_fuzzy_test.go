@@ -2,10 +2,8 @@ package pinpoint_test
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
 
-	gocitiesjson "github.com/deslittle/go-cities.json"
 	pinpoint "github.com/deslittle/pinpoint"
 	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
@@ -28,19 +26,19 @@ func init() {
 	fuzzyFinder = _fuzzyFinder
 }
 
-func TestFuzzySupports(t *testing.T) {
-	failCount := 0
-	for _, city := range gocitiesjson.Cities {
-		name := fuzzyFinder.GetLocationName(city.Lng, city.Lat)
-		if name == "" {
-			failCount += 1
-		}
-	}
-	// more than 10%
-	if failCount/len(gocitiesjson.Cities)*100 > 10 {
-		t.Errorf("has too many covered cities %v", failCount)
-	}
-}
+// func TestFuzzySupports(t *testing.T) {
+// 	failCount := 0
+// 	for _, city := range gocitiesjson.Cities {
+// 		name := fuzzyFinder.GetLocationName(city.Lng, city.Lat)
+// 		if name == "" {
+// 			failCount += 1
+// 		}
+// 	}
+// 	// more than 10%
+// 	if failCount/len(gocitiesjson.Cities)*100 > 10 {
+// 		t.Errorf("has too many covered cities %v", failCount)
+// 	}
+// }
 
 func ExampleFuzzyFinder_GetLocationName() {
 	input := &pb.PreindexLocations{}
@@ -54,7 +52,8 @@ func ExampleFuzzyFinder_GetLocationName() {
 
 func BenchmarkFuzzyFinder_GetLocationName_Random_WorldCities(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
-		p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
+		//p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
+		p := struct{ Lat, Lng float64 }{Lat: 40.0786, Lng: 116.6386}
 		_ = fuzzyFinder.GetLocationName(p.Lng, p.Lat)
 	}
 }

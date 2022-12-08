@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
-	gocitiesjson "github.com/deslittle/go-cities.json"
 	pinpoint "github.com/deslittle/pinpoint"
 	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
@@ -79,27 +77,27 @@ func main() {
 			})
 		}
 	}
-	for _, city := range gocitiesjson.Cities {
-		_lng := city.Lng
-		_lat := city.Lat
-		fullRes := fullFinder.GetLocationName(_lng, _lat)
-		defaultRes := defaultfinder.GetLocationName(_lng, _lat)
-		if fullRes == defaultRes {
-			continue
-		}
-		notEqualData.Features = append(notEqualData.Features, Features{
-			Type: "Feature",
-			Properties: map[string]interface{}{
-				"lite":      defaultRes,
-				"full":      fullRes,
-				"worldCity": fmt.Sprintf("%v-%v", city.Country, city.Name),
-			},
-			Geometry: Geometry{
-				Type:        "Point",
-				Coordinates: []float64{_lng, _lat},
-			},
-		})
-	}
+	// for _, city := range gocitiesjson.Cities {
+	// 	_lng := city.Lng
+	// 	_lat := city.Lat
+	// 	fullRes := fullFinder.GetLocationName(_lng, _lat)
+	// 	defaultRes := defaultfinder.GetLocationName(_lng, _lat)
+	// 	if fullRes == defaultRes {
+	// 		continue
+	// 	}
+	// 	notEqualData.Features = append(notEqualData.Features, Features{
+	// 		Type: "Feature",
+	// 		Properties: map[string]interface{}{
+	// 			"lite":      defaultRes,
+	// 			"full":      fullRes,
+	// 			"worldCity": fmt.Sprintf("%v-%v", city.Country, city.Name),
+	// 		},
+	// 		Geometry: Geometry{
+	// 			Type:        "Point",
+	// 			Coordinates: []float64{_lng, _lat},
+	// 		},
+	// 	})
+	// }
 
 	file, _ := json.Marshal(notEqualData)
 

@@ -3,7 +3,6 @@ module github.com/deslittle/pinpoint
 go 1.19
 
 require (
-	github.com/deslittle/go-cities.json v0.0.1
 	github.com/deslittle/tzf-rel v0.0.1
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/paulmach/orb v0.7.1

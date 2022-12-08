@@ -20,18 +20,18 @@ import (
 var ErrNoLocationFound = errors.New("pinpoint: no location found")
 
 type Option struct {
-	DropPBTZ bool
+	DropPBLoc bool
 }
 
 type OptionFunc = func(opt *Option)
 
 // SetDropPBTZ will make Finder not save [github.com/deslittle/pinpoint/pb.Location] in memory
 func SetDropPBTZ(opt *Option) {
-	opt.DropPBTZ = true
+	opt.DropPBLoc = true
 }
 
 type locitem struct {
-	pbtz     *pb.Location
+	pbloc    *pb.Location
 	location *time.Location
 	name     string
 	shift    int
@@ -139,8 +139,8 @@ func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 			shift:    tzOffset,
 			name:     location.Name,
 		}
-		if !opt.DropPBTZ {
-			newItem.pbtz = location
+		if !opt.DropPBLoc {
+			newItem.pbloc = location
 		}
 		for _, polygon := range location.Polygons {
 
@@ -263,7 +263,7 @@ func (f *Finder) GetLocationNames(lng float64, lat float64) ([]string, error) {
 	return ret, nil
 }
 
-func (f *Finder) GetLocationLoc(lng float64, lat float64) (*time.Location, error) {
+func (f *Finder) GetLocationTz(lng float64, lat float64) (*time.Location, error) {
 	item, err := f.getItem(lng, lat)
 	if err != nil {
 		return nil, err
@@ -272,33 +272,33 @@ func (f *Finder) GetLocationLoc(lng float64, lat float64) (*time.Location, error
 }
 
 func (f *Finder) GetLocation(lng float64, lat float64) (*pb.Location, error) {
-	if f.opt.DropPBTZ {
-		return nil, errors.New("tzf: not suppor when reduce mem")
+	if f.opt.DropPBLoc {
+		return nil, errors.New("pinpoint: not suppor when reduce mem")
 	}
 	item, err := f.getItem(lng, lat)
 	if err != nil {
 		return nil, err
 	}
-	return item[0].pbtz, nil
+	return item[0].pbloc, nil
 }
 
 func (f *Finder) GetLocationShapeByName(name string) (*pb.Location, error) {
 	for _, item := range f.items {
 		if item.name == name {
-			return item.pbtz, nil
+			return item.pbloc, nil
 		}
 	}
 	return nil, fmt.Errorf("location=%v not found", name)
 }
 
 func (f *Finder) GetLocationShapeByShift(shift int) ([]*pb.Location, error) {
-	if f.opt.DropPBTZ {
+	if f.opt.DropPBLoc {
 		return nil, errors.New("pinpoint: not suppor when reduce mem")
 	}
 	res := make([]*pb.Location, 0)
 	for _, item := range f.items {
 		if item.shift == shift {
-			res = append(res, item.pbtz)
+			res = append(res, item.pbloc)
 		}
 	}
 	if len(res) == 0 {
