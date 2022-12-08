@@ -61,8 +61,8 @@ func main() {
 		for lat := -90; lat <= 90; lat++ {
 			_lng := float64(lng)
 			_lat := float64(lat)
-			fullRes := fullFinder.GetTimezoneName(_lng, _lat)
-			defaultRes := defaultfinder.GetTimezoneName(_lng, _lat)
+			fullRes := fullFinder.GetLocationName(_lng, _lat)
+			defaultRes := defaultfinder.GetLocationName(_lng, _lat)
 			if fullRes == defaultRes {
 				continue
 			}
@@ -82,8 +82,8 @@ func main() {
 	for _, city := range gocitiesjson.Cities {
 		_lng := city.Lng
 		_lat := city.Lat
-		fullRes := fullFinder.GetTimezoneName(_lng, _lat)
-		defaultRes := defaultfinder.GetTimezoneName(_lng, _lat)
+		fullRes := fullFinder.GetLocationName(_lng, _lat)
+		defaultRes := defaultfinder.GetLocationName(_lng, _lat)
 		if fullRes == defaultRes {
 			continue
 		}

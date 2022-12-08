@@ -33,5 +33,5 @@ func main() {
 	flag.Float64Var(&lat, "lat", 39.9289, "lontitude")
 	flag.Parse()
 
-	fmt.Println(finder.GetTimezoneName(lng, lat))
+	fmt.Println(finder.GetLocationName(lng, lat))
 }

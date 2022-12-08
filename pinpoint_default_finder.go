@@ -49,12 +49,12 @@ func NewDefaultFinder() (*DefaultFinder, error) {
 	return f, nil
 }
 
-func (f *DefaultFinder) GetTimezoneName(lng float64, lat float64) string {
-	fuzzyRes := f.fuzzyFinder.GetTimezoneName(lng, lat)
+func (f *DefaultFinder) GetLocationName(lng float64, lat float64) string {
+	fuzzyRes := f.fuzzyFinder.GetLocationName(lng, lat)
 	if fuzzyRes != "" {
 		return fuzzyRes
 	}
-	name := f.finder.GetTimezoneName(lng, lat)
+	name := f.finder.GetLocationName(lng, lat)
 	if name != "" {
 		return name
 	}
@@ -62,11 +62,11 @@ func (f *DefaultFinder) GetTimezoneName(lng float64, lat float64) string {
 		for _, dy := range []float64{-0.02, 0, 0.02} {
 			dlng := dx + lng
 			dlat := dy + lat
-			fuzzyRes := f.fuzzyFinder.GetTimezoneName(dlng, dlat)
+			fuzzyRes := f.fuzzyFinder.GetLocationName(dlng, dlat)
 			if fuzzyRes != "" {
 				return fuzzyRes
 			}
-			name := f.finder.GetTimezoneName(dlng, dlat)
+			name := f.finder.GetLocationName(dlng, dlat)
 			if name != "" {
 				return name
 			}
@@ -75,14 +75,14 @@ func (f *DefaultFinder) GetTimezoneName(lng float64, lat float64) string {
 	return ""
 }
 
-func (f *DefaultFinder) GetTimezoneNames(lng float64, lat float64) ([]string, error) {
-	fuzzyRes, err := f.fuzzyFinder.GetTimezoneNames(lng, lat)
+func (f *DefaultFinder) GetLocationNames(lng float64, lat float64) ([]string, error) {
+	fuzzyRes, err := f.fuzzyFinder.GetLocationNames(lng, lat)
 	if err == nil {
 		return fuzzyRes, nil
 	}
-	return f.finder.GetTimezoneNames(lng, lat)
+	return f.finder.GetLocationNames(lng, lat)
 }
 
-func (f *DefaultFinder) TimezoneNames() []string {
-	return f.finder.TimezoneNames()
+func (f *DefaultFinder) LocationNames() []string {
+	return f.finder.LocationNames()
 }

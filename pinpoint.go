@@ -1,4 +1,4 @@
-// package pinpoint is a package convert (lng,lat) to timezone.
+// package pinpoint is a package convert (lng,lat) to location.
 //
 // Inspired by timezonefinder https://github.com/jannikmi/timezonefinder,
 // fast python package for finding the timezone of any point on earth (coordinates) offline.
@@ -17,7 +17,7 @@ import (
 	"github.com/tidwall/rtree"
 )
 
-var ErrNoTimezoneFound = errors.New("tzf: no timezone found")
+var ErrNoLocationFound = errors.New("pinpoint: no location found")
 
 type Option struct {
 	DropPBTZ bool
@@ -30,7 +30,7 @@ func SetDropPBTZ(opt *Option) {
 	opt.DropPBTZ = true
 }
 
-type tzitem struct {
+type locitem struct {
 	pbtz     *pb.Location
 	location *time.Location
 	name     string
@@ -44,7 +44,7 @@ func newNotFoundErr(lng float64, lat float64) error {
 	return fmt.Errorf("tzf: not found for %v,%v", lng, lat)
 }
 
-func (i *tzitem) ContainsPoint(p geometry.Point) bool {
+func (i *locitem) ContainsPoint(p geometry.Point) bool {
 	for _, poly := range i.polys {
 		if poly.ContainsPoint(p) {
 			return true
@@ -53,7 +53,7 @@ func (i *tzitem) ContainsPoint(p geometry.Point) bool {
 	return false
 }
 
-func (i *tzitem) GetMinMax() ([2]float64, [2]float64) {
+func (i *locitem) GetMinMax() ([2]float64, [2]float64) {
 	retmin := [2]float64{
 		i.polys[0].Rect().Min.X,
 		i.polys[0].Rect().Min.Y,
@@ -91,24 +91,24 @@ func (i *tzitem) GetMinMax() ([2]float64, [2]float64) {
 // Memeory will use about 100MB if lite data and 1G if full data.
 // Performance is very stable and very accuate.
 type Finder struct {
-	items   []*tzitem
+	items   []*locitem
 	names   []string
 	reduced bool
-	tr      *rtree.RTreeG[*tzitem]
+	tr      *rtree.RTreeG[*locitem]
 	opt     *Option
 }
 
 func NewFinderFromRawJSON(input *convert.BoundaryFile, opts ...OptionFunc) (*Finder, error) {
-	timezones, err := convert.Do(input)
+	locations, err := convert.Do(input)
 	if err != nil {
 		return nil, err
 	}
-	return NewFinderFromPB(timezones, opts...)
+	return NewFinderFromPB(locations, opts...)
 }
 
 func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 	now := time.Now()
-	items := make([]*tzitem, 0)
+	items := make([]*locitem, 0)
 	names := make([]string, 0)
 
 	opt := &Option{}
@@ -116,33 +116,33 @@ func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 		optFunc(opt)
 	}
 
-	tr := &rtree.RTreeG[*tzitem]{}
-	for _, timezone := range input.Locations {
-		names = append(names, timezone.Name)
-		location, err := time.LoadLocation(timezone.Name)
+	tr := &rtree.RTreeG[*locitem]{}
+	for _, location := range input.Locations {
+		names = append(names, location.Name)
+		tz, err := time.LoadLocation(location.Name)
 		if err != nil {
 			// check if changed
-			oldname, ok := backportstz[timezone.Name]
+			oldname, ok := backportstz[location.Name]
 			if !ok {
 				return nil, err
 			}
-			location, err = time.LoadLocation(oldname)
+			tz, err = time.LoadLocation(oldname)
 			if err != nil {
 				return nil, err
 			}
 
 		}
-		_, tzOffset := now.In(location).Zone()
+		_, tzOffset := now.In(tz).Zone()
 
-		newItem := &tzitem{
-			location: location,
+		newItem := &locitem{
+			location: tz,
 			shift:    tzOffset,
-			name:     timezone.Name,
+			name:     location.Name,
 		}
 		if !opt.DropPBTZ {
-			newItem.pbtz = timezone
+			newItem.pbtz = location
 		}
-		for _, polygon := range timezone.Polygons {
+		for _, polygon := range location.Polygons {
 
 			newPoints := make([]geometry.Point, 0)
 			for _, point := range polygon.Points {
@@ -199,12 +199,12 @@ func getRTreeRangeShifed(lng float64, lat float64) float64 {
 	return 30.0
 }
 
-func (f *Finder) getItemInRanges(lng float64, lat float64) []*tzitem {
-	candicates := []*tzitem{}
+func (f *Finder) getItemInRanges(lng float64, lat float64) []*locitem {
+	candicates := []*locitem{}
 
 	// TODO(deslittle): fix this range
 	shifted := getRTreeRangeShifed(lng, lat)
-	f.tr.Search([2]float64{lng - shifted, lat - shifted}, [2]float64{lng + shifted, lat + shifted}, func(min, max [2]float64, data *tzitem) bool {
+	f.tr.Search([2]float64{lng - shifted, lat - shifted}, [2]float64{lng + shifted, lat + shifted}, func(min, max [2]float64, data *locitem) bool {
 		candicates = append(candicates, data)
 		return true
 	})
@@ -215,15 +215,15 @@ func (f *Finder) getItemInRanges(lng float64, lat float64) []*tzitem {
 	return candicates
 }
 
-func (f *Finder) getItem(lng float64, lat float64) ([]*tzitem, error) {
+func (f *Finder) getItem(lng float64, lat float64) ([]*locitem, error) {
 	p := geometry.Point{
 		X: float64(lng),
 		Y: float64(lat),
 	}
-	ret := []*tzitem{}
+	ret := []*locitem{}
 	candicates := f.getItemInRanges(lng, lat)
 	if len(candicates) == 0 {
-		return nil, ErrNoTimezoneFound
+		return nil, ErrNoLocationFound
 	}
 	for _, item := range candicates {
 		if item.ContainsPoint(p) {
@@ -236,8 +236,8 @@ func (f *Finder) getItem(lng float64, lat float64) ([]*tzitem, error) {
 	return ret, nil
 }
 
-// GetTimezoneName will use alphabet order and return first matched result.
-func (f *Finder) GetTimezoneName(lng float64, lat float64) string {
+// GetLocationName will use alphabet order and return first matched result.
+func (f *Finder) GetLocationName(lng float64, lat float64) string {
 	p := geometry.Point{
 		X: float64(lng),
 		Y: float64(lat),
@@ -250,7 +250,7 @@ func (f *Finder) GetTimezoneName(lng float64, lat float64) string {
 	return ""
 }
 
-func (f *Finder) GetTimezoneNames(lng float64, lat float64) ([]string, error) {
+func (f *Finder) GetLocationNames(lng float64, lat float64) ([]string, error) {
 	item, err := f.getItem(lng, lat)
 	if err != nil {
 		return nil, err
@@ -263,7 +263,7 @@ func (f *Finder) GetTimezoneNames(lng float64, lat float64) ([]string, error) {
 	return ret, nil
 }
 
-func (f *Finder) GetTimezoneLoc(lng float64, lat float64) (*time.Location, error) {
+func (f *Finder) GetLocationLoc(lng float64, lat float64) (*time.Location, error) {
 	item, err := f.getItem(lng, lat)
 	if err != nil {
 		return nil, err
@@ -271,7 +271,7 @@ func (f *Finder) GetTimezoneLoc(lng float64, lat float64) (*time.Location, error
 	return item[0].location, nil
 }
 
-func (f *Finder) GetTimezone(lng float64, lat float64) (*pb.Location, error) {
+func (f *Finder) GetLocation(lng float64, lat float64) (*pb.Location, error) {
 	if f.opt.DropPBTZ {
 		return nil, errors.New("tzf: not suppor when reduce mem")
 	}
@@ -282,18 +282,18 @@ func (f *Finder) GetTimezone(lng float64, lat float64) (*pb.Location, error) {
 	return item[0].pbtz, nil
 }
 
-func (f *Finder) GetTimezoneShapeByName(name string) (*pb.Location, error) {
+func (f *Finder) GetLocationShapeByName(name string) (*pb.Location, error) {
 	for _, item := range f.items {
 		if item.name == name {
 			return item.pbtz, nil
 		}
 	}
-	return nil, fmt.Errorf("timezone=%v not found", name)
+	return nil, fmt.Errorf("location=%v not found", name)
 }
 
-func (f *Finder) GetTimezoneShapeByShift(shift int) ([]*pb.Location, error) {
+func (f *Finder) GetLocationShapeByShift(shift int) ([]*pb.Location, error) {
 	if f.opt.DropPBTZ {
-		return nil, errors.New("tzf: not suppor when reduce mem")
+		return nil, errors.New("pinpoint: not suppor when reduce mem")
 	}
 	res := make([]*pb.Location, 0)
 	for _, item := range f.items {
@@ -307,6 +307,6 @@ func (f *Finder) GetTimezoneShapeByShift(shift int) ([]*pb.Location, error) {
 	return res, nil
 }
 
-func (f *Finder) TimezoneNames() []string {
+func (f *Finder) LocationNames() []string {
 	return f.names
 }

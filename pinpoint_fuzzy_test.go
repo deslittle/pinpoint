@@ -31,7 +31,7 @@ func init() {
 func TestFuzzySupports(t *testing.T) {
 	failCount := 0
 	for _, city := range gocitiesjson.Cities {
-		name := fuzzyFinder.GetTimezoneName(city.Lng, city.Lat)
+		name := fuzzyFinder.GetLocationName(city.Lng, city.Lat)
 		if name == "" {
 			failCount += 1
 		}
@@ -42,19 +42,19 @@ func TestFuzzySupports(t *testing.T) {
 	}
 }
 
-func ExampleFuzzyFinder_GetTimezoneName() {
+func ExampleFuzzyFinder_GetLocationName() {
 	input := &pb.PreindexLocations{}
 	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFuzzyFinderFromPB(input)
-	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
+	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
 	// Output: Asia/Shanghai
 }
 
-func BenchmarkFuzzyFinder_GetTimezoneName_Random_WorldCities(b *testing.B) {
+func BenchmarkFuzzyFinder_GetLocationName_Random_WorldCities(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
 		p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
-		_ = fuzzyFinder.GetTimezoneName(p.Lng, p.Lat)
+		_ = fuzzyFinder.GetLocationName(p.Lng, p.Lat)
 	}
 }

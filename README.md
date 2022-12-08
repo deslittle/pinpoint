@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
+	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
 }
 ```
 
@@ -48,7 +48,7 @@ func main() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
+	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
 }
 ```
 
@@ -143,14 +143,14 @@ goos: darwin
 goarch: amd64
 pkg: github.com/deslittle/pinpoint
 cpu: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
-BenchmarkDefaultFinder_GetTimezoneName_Random_WorldCities-16    	  443942	      2583 ns/op
-BenchmarkFuzzyFinder_GetTimezoneName_Random_WorldCities-16      	 1580524	       769.3 ns/op
-BenchmarkGetTimezoneName-16                                     	  184234	      6983 ns/op
-BenchmarkGetTimezoneNameAtEdge-16                               	  145342	      8779 ns/op
-BenchmarkGetTimezoneName_Random_WorldCities-16                  	  130540	      9247 ns/op
-BenchmarkFullFinder_GetTimezoneName-16                          	  164649	      7256 ns/op
-BenchmarkFullFinder_GetTimezoneNameAtEdge-16                    	  136508	      9382 ns/op
-BenchmarkFullFinder_GetTimezoneName_Random_WorldCities-16       	   91137	     12385 ns/op
+BenchmarkDefaultFinder_GetLocationName_Random_WorldCities-16    	  443942	      2583 ns/op
+BenchmarkFuzzyFinder_GetLocationName_Random_WorldCities-16      	 1580524	       769.3 ns/op
+BenchmarkGetLocationName-16                                     	  184234	      6983 ns/op
+BenchmarkGetLocationNameAtEdge-16                               	  145342	      8779 ns/op
+BenchmarkGetLocationName_Random_WorldCities-16                  	  130540	      9247 ns/op
+BenchmarkFullFinder_GetLocationName-16                          	  164649	      7256 ns/op
+BenchmarkFullFinder_GetLocationNameAtEdge-16                    	  136508	      9382 ns/op
+BenchmarkFullFinder_GetLocationName_Random_WorldCities-16       	   91137	     12385 ns/op
 PASS
 ok  	github.com/deslittle/pinpoint	19.073s
 ```

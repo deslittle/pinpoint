@@ -43,45 +43,45 @@ func initFull() {
 	fullFinder = _finder
 }
 
-func BenchmarkGetTimezoneName(b *testing.B) {
+func BenchmarkGetLocationName(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
-		_ = finder.GetTimezoneName(116.6386, 40.0786)
+		_ = finder.GetLocationName(116.6386, 40.0786)
 	}
 }
 
-func BenchmarkGetTimezoneNameAtEdge(b *testing.B) {
+func BenchmarkGetLocationNameAtEdge(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
-		_ = finder.GetTimezoneName(110.8571, 43.1483)
+		_ = finder.GetLocationName(110.8571, 43.1483)
 	}
 }
 
-func BenchmarkGetTimezoneName_Random_WorldCities(b *testing.B) {
-	for i := 0; i <= b.N; i++ {
-		p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
-		_ = finder.GetTimezoneName(p.Lng, p.Lat)
-	}
-}
-
-func BenchmarkFullFinder_GetTimezoneName(b *testing.B) {
-	for i := 0; i <= b.N; i++ {
-		_ = fullFinder.GetTimezoneName(116.6386, 40.0786)
-	}
-}
-
-func BenchmarkFullFinder_GetTimezoneNameAtEdge(b *testing.B) {
-	for i := 0; i <= b.N; i++ {
-		_ = fullFinder.GetTimezoneName(110.8571, 43.1483)
-	}
-}
-
-func BenchmarkFullFinder_GetTimezoneName_Random_WorldCities(b *testing.B) {
+func BenchmarkGetLocationName_Random_WorldCities(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
 		p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
-		_ = fullFinder.GetTimezoneName(p.Lng, p.Lat)
+		_ = finder.GetLocationName(p.Lng, p.Lat)
 	}
 }
 
-func ExampleFinder_GetTimezoneName() {
+func BenchmarkFullFinder_GetLocationName(b *testing.B) {
+	for i := 0; i <= b.N; i++ {
+		_ = fullFinder.GetLocationName(116.6386, 40.0786)
+	}
+}
+
+func BenchmarkFullFinder_GetLocationNameAtEdge(b *testing.B) {
+	for i := 0; i <= b.N; i++ {
+		_ = fullFinder.GetLocationName(110.8571, 43.1483)
+	}
+}
+
+func BenchmarkFullFinder_GetLocationName_Random_WorldCities(b *testing.B) {
+	for i := 0; i <= b.N; i++ {
+		p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
+		_ = fullFinder.GetLocationName(p.Lng, p.Lat)
+	}
+}
+
+func ExampleFinder_GetLocationName() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
@@ -94,11 +94,11 @@ func ExampleFinder_GetTimezoneName() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
+	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
 	// Output: Asia/Shanghai
 }
 
-func ExampleFinder_GetTimezoneLoc() {
+func ExampleFinder_GetLocationLoc() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
@@ -111,11 +111,11 @@ func ExampleFinder_GetTimezoneLoc() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	fmt.Println(finder.GetTimezoneLoc(116.6386, 40.0786))
+	fmt.Println(finder.GetLocationLoc(116.6386, 40.0786))
 	// Output: Asia/Shanghai <nil>
 }
 
-func ExampleFinder_GetTimezoneShapeByName() {
+func ExampleFinder_GetLocationShapeByName() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
@@ -125,12 +125,12 @@ func ExampleFinder_GetTimezoneShapeByName() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	pbtz, err := finder.GetTimezoneShapeByName("Asia/Shanghai")
+	pbtz, err := finder.GetLocationShapeByName("Asia/Shanghai")
 	fmt.Printf("%v %v\n", pbtz.Name, err)
 	// Output: Asia/Shanghai <nil>
 }
 
-func ExampleFinder_GetTimezoneShapeByShift() {
+func ExampleFinder_GetLocationShapeByShift() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
@@ -140,7 +140,7 @@ func ExampleFinder_GetTimezoneShapeByShift() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	pbtzs, _ := finder.GetTimezoneShapeByShift(28800)
+	pbtzs, _ := finder.GetLocationShapeByShift(28800)
 
 	pbnames := make([]string, 0)
 	for _, pbtz := range pbtzs {

@@ -30,11 +30,11 @@ func CompressWithPolyline(input *pb.Locations) *pb.CompressedLocations {
 	output := &pb.CompressedLocations{
 		Method: pb.CompressMethod_Polyline,
 	}
-	for _, timezone := range input.Locations {
-		reducedTimezone := &pb.CompressedLocation{
-			Name: timezone.Name,
+	for _, location := range input.Locations {
+		reducedLocation := &pb.CompressedLocation{
+			Name: location.Name,
 		}
-		for _, polygon := range timezone.Polygons {
+		for _, polygon := range location.Polygons {
 			newPoly := &pb.CompressedPolygon{
 				Points: CompressedPointsToPolylineBytes(polygon.Points),
 				Holes:  make([]*pb.CompressedPolygon, 0),
@@ -44,9 +44,9 @@ func CompressWithPolyline(input *pb.Locations) *pb.CompressedLocations {
 					Points: CompressedPointsToPolylineBytes(hole.Points),
 				})
 			}
-			reducedTimezone.Data = append(reducedTimezone.Data, newPoly)
+			reducedLocation.Data = append(reducedLocation.Data, newPoly)
 		}
-		output.Locations = append(output.Locations, reducedTimezone)
+		output.Locations = append(output.Locations, reducedLocation)
 	}
 	return output
 }
@@ -56,17 +56,17 @@ func Compress(input *pb.Locations, method pb.CompressMethod) (*pb.CompressedLoca
 	case pb.CompressMethod_Polyline:
 		return CompressWithPolyline(input), nil
 	default:
-		return nil, fmt.Errorf("tzf/reduce: unknown method %v", method)
+		return nil, fmt.Errorf("pinpoint/reduce: unknown method %v", method)
 	}
 }
 
 func DecompressWithPolyline(input *pb.CompressedLocations) *pb.Locations {
 	output := &pb.Locations{}
-	for _, timezone := range input.Locations {
-		reducedTimezone := &pb.Location{
-			Name: timezone.Name,
+	for _, location := range input.Locations {
+		reducedLocation := &pb.Location{
+			Name: location.Name,
 		}
-		for _, polygon := range timezone.Data {
+		for _, polygon := range location.Data {
 			newPoly := &pb.Polygon{
 				Points: DecompressedPolylineBytesToPoints(polygon.Points),
 				Holes:  make([]*pb.Polygon, 0),
@@ -76,9 +76,9 @@ func DecompressWithPolyline(input *pb.CompressedLocations) *pb.Locations {
 					Points: DecompressedPolylineBytesToPoints(hole.Points),
 				})
 			}
-			reducedTimezone.Polygons = append(reducedTimezone.Polygons, newPoly)
+			reducedLocation.Polygons = append(reducedLocation.Polygons, newPoly)
 		}
-		output.Locations = append(output.Locations, reducedTimezone)
+		output.Locations = append(output.Locations, reducedLocation)
 	}
 	return output
 }
@@ -88,6 +88,6 @@ func Decompress(input *pb.CompressedLocations) (*pb.Locations, error) {
 	case pb.CompressMethod_Polyline:
 		return DecompressWithPolyline(input), nil
 	default:
-		return nil, fmt.Errorf("tzf/reduce: unknown method %v", input.Method)
+		return nil, fmt.Errorf("pinpoint/reduce: unknown method %v", input.Method)
 	}
 }

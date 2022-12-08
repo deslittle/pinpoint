@@ -6,13 +6,13 @@ import (
 	"github.com/paulmach/orb/maptile"
 )
 
-// FuzzyFinder use a tile map to store timezone name. Data are made by
-// [github.com/deslittle/pinpoint/cmd/preindextzpb] which powerd by
-// [github.com/deslittle/pinpoint/preindex.PreIndexTimezones].
+// FuzzyFinder use a tile map to store location name. Data are made by
+// [github.com/deslittle/pinpoint/cmd/preindexlocpb] which powerd by
+// [github.com/deslittle/pinpoint/preindex.PreIndexLocations].
 type FuzzyFinder struct {
 	idxZoom int
 	aggZoom int
-	m       map[maptile.Tile][]string // timezones may have common area
+	m       map[maptile.Tile][]string // locations may have common area
 }
 
 func NewFuzzyFinderFromPB(input *pb.PreindexLocations) (*FuzzyFinder, error) {
@@ -31,15 +31,15 @@ func NewFuzzyFinderFromPB(input *pb.PreindexLocations) (*FuzzyFinder, error) {
 	return f, nil
 }
 
-func (f *FuzzyFinder) GetTimezoneName(lng float64, lat float64) string {
-	names, err := f.GetTimezoneNames(lng, lat)
+func (f *FuzzyFinder) GetLocationName(lng float64, lat float64) string {
+	names, err := f.GetLocationNames(lng, lat)
 	if err != nil {
 		return ""
 	}
 	return names[0]
 }
 
-func (f *FuzzyFinder) GetTimezoneNames(lng float64, lat float64) ([]string, error) {
+func (f *FuzzyFinder) GetLocationNames(lng float64, lat float64) ([]string, error) {
 	p := orb.Point{lng, lat}
 	for z := f.aggZoom; z <= f.idxZoom; z++ {
 		key := maptile.At(p, maptile.Zoom(z))
@@ -48,5 +48,5 @@ func (f *FuzzyFinder) GetTimezoneNames(lng float64, lat float64) ([]string, erro
 			return v, nil
 		}
 	}
-	return nil, ErrNoTimezoneFound
+	return nil, ErrNoLocationFound
 }
