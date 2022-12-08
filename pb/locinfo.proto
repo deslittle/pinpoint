@@ -45,14 +45,14 @@ message Polygon {
   repeated Polygon holes = 2;  // define the "interior rings" as holes
 }
 
-// Timezone is a timezone's all data.
-message Timezone {
+// Location is a locations's all data.
+message Location {
   repeated Polygon polygons = 1;
   string name = 2;
 }
 
-message Timezones {
-  repeated Timezone timezones = 1;
+message Locations {
+  repeated Location locations = 1;
   bool reduced = 2;  // Reduced data will toggle neighbor search as plan b
 }
 
@@ -67,30 +67,30 @@ message CompressedPolygon {
   repeated CompressedPolygon holes = 2;
 }
 
-// CompressedTimezonesItem designed for binary file as small as possible.
-message CompressedTimezone {
+// CompressedLocationsItem designed for binary file as small as possible.
+message CompressedLocation {
   repeated CompressedPolygon data = 1;
   string name = 2;
 }
 
-message CompressedTimezones {
+message CompressedLocations {
   CompressMethod method = 1;
-  repeated CompressedTimezone timezones = 2;
+  repeated CompressedLocation locations = 2;
 }
 
-// PreindexTimezone tile item.
+// PreindexLocation tile item.
 //
 // The X/Y/Z are OSM style like map tile index values.
-message PreindexTimezone {
+message PreindexLocation {
   string name = 1;
   int32 x = 2;
   int32 y = 3;
   int32 z = 4;
 }
 
-// PreindexTimezones is all preindex timezone's dumps.
-message PreindexTimezones {
+// PreindexLocations is all preindex location's dumps.
+message PreindexLocations {
   int32 idxZoom = 1;  // which zoom value the tiles generated
   int32 aggZoom = 2;  // which zoom value the tiles merge up with.
-  repeated PreindexTimezone keys = 3;
+  repeated PreindexLocation keys = 3;
 }

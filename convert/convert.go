@@ -36,11 +36,11 @@ type BoundaryFile struct {
 	Features []*FeatureItem `json:"features"`
 }
 
-func Do(input *BoundaryFile) (*pb.Timezones, error) {
-	output := make([]*pb.Timezone, 0)
+func Do(input *BoundaryFile) (*pb.Locations, error) {
+	output := make([]*pb.Location, 0)
 
 	for _, item := range input.Features {
-		pbtzItem := &pb.Timezone{
+		pbtzItem := &pb.Location{
 			Name: item.Properties.Tzid,
 		}
 
@@ -124,7 +124,7 @@ func Do(input *BoundaryFile) (*pb.Timezones, error) {
 		output = append(output, pbtzItem)
 	}
 
-	return &pb.Timezones{
-		Timezones: output,
+	return &pb.Locations{
+		Locations: output,
 	}, nil
 }

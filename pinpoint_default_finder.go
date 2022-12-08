@@ -18,7 +18,7 @@ type DefaultFinder struct {
 
 func NewDefaultFinder() (*DefaultFinder, error) {
 	fuzzyFinder, err := func() (*FuzzyFinder, error) {
-		input := &pb.PreindexTimezones{}
+		input := &pb.PreindexLocations{}
 		if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
 			panic(err)
 		}
@@ -29,7 +29,7 @@ func NewDefaultFinder() (*DefaultFinder, error) {
 	}
 
 	finder, err := func() (*Finder, error) {
-		input := &pb.CompressedTimezones{}
+		input := &pb.CompressedLocations{}
 		if err := proto.Unmarshal(tzfrel.LiteCompressData, input); err != nil {
 			panic(err)
 		}

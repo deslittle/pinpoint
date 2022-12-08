@@ -26,7 +26,7 @@ func init() {
 }
 
 func initLite() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 	if err := proto.Unmarshal(tzfrel.LiteData, input); err != nil {
 		panic(err)
 	}
@@ -35,7 +35,7 @@ func initLite() {
 }
 
 func initFull() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 	if err := proto.Unmarshal(tzfrel.FullData, input); err != nil {
 		panic(err)
 	}
@@ -82,7 +82,7 @@ func BenchmarkFullFinder_GetTimezoneName_Random_WorldCities(b *testing.B) {
 }
 
 func ExampleFinder_GetTimezoneName() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
 	dataFile := tzfrel.LiteData
@@ -99,7 +99,7 @@ func ExampleFinder_GetTimezoneName() {
 }
 
 func ExampleFinder_GetTimezoneLoc() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
 	dataFile := tzfrel.LiteData
@@ -116,7 +116,7 @@ func ExampleFinder_GetTimezoneLoc() {
 }
 
 func ExampleFinder_GetTimezoneShapeByName() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
 	dataFile := tzfrel.LiteData
@@ -131,7 +131,7 @@ func ExampleFinder_GetTimezoneShapeByName() {
 }
 
 func ExampleFinder_GetTimezoneShapeByShift() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
 	dataFile := tzfrel.LiteData

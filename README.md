@@ -39,7 +39,7 @@ import (
 )
 
 func main() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 
 	// Full data, about 83.5MB
 	dataFile := tzfrel.FullData

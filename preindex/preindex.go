@@ -111,7 +111,7 @@ func EnsureInside(geopolys []*geometry.Poly, tiles []maptile.Tile) []maptile.Til
 // PreIndexTimezone will gen tiles at idxZoom level and merge up to aggZoom.
 //
 // The `idxZoom` level tiles will be removed before final return.
-func PreIndexTimezone(input *pb.Timezone, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) ([]*pb.PreindexTimezone, error) {
+func PreIndexTimezone(input *pb.Location, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) ([]*pb.PreindexLocation, error) {
 	// Generate all tiles event not included in timezone shape
 	tiles := []maptile.Tile{}
 	for _, poly := range input.Polygons {
@@ -180,12 +180,12 @@ func PreIndexTimezone(input *pb.Timezone, idxZoom, aggZoom, maxZoomLevelToKeep m
 	// _ = os.WriteFile("preindexex.geojson", b, 0644)
 
 	// Dumps as pb
-	ret := []*pb.PreindexTimezone{}
+	ret := []*pb.PreindexLocation{}
 	for _, v := range maps.Keys(mergedtiles) {
 		if int(v.Z) > int(maxZoomLevelToKeep) {
 			continue
 		}
-		ret = append(ret, &pb.PreindexTimezone{
+		ret = append(ret, &pb.PreindexLocation{
 			Name: input.Name,
 			X:    int32(v.X),
 			Y:    int32(v.Y),
@@ -195,13 +195,13 @@ func PreIndexTimezone(input *pb.Timezone, idxZoom, aggZoom, maxZoomLevelToKeep m
 	return ret, nil
 }
 
-func PreIndexTimezones(input *pb.Timezones, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) *pb.PreindexTimezones {
-	ret := &pb.PreindexTimezones{
+func PreIndexTimezones(input *pb.Locations, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) *pb.PreindexLocations {
+	ret := &pb.PreindexLocations{
 		IdxZoom: int32(idxZoom),
 		AggZoom: int32(aggZoom),
-		Keys:    make([]*pb.PreindexTimezone, 0),
+		Keys:    make([]*pb.PreindexLocation, 0),
 	}
-	for _, tz := range input.Timezones {
+	for _, tz := range input.Locations {
 		start := time.Now()
 		preindexes, err := PreIndexTimezone(tz, idxZoom, aggZoom, maxZoomLevelToKeep, dropEdgeLayger)
 		if err == nil {
@@ -213,7 +213,7 @@ func PreIndexTimezones(input *pb.Timezones, idxZoom, aggZoom, maxZoomLevelToKeep
 	return ret
 }
 
-func PreIndexTimezonesToGeoJSON(input *pb.PreindexTimezones) []byte {
+func PreIndexTimezonesToGeoJSON(input *pb.PreindexLocations) []byte {
 	tileset := maptile.Set{}
 	for _, key := range input.Keys {
 		tileset[maptile.New(uint32(key.X), uint32(key.Y), maptile.Zoom(key.Z))] = true

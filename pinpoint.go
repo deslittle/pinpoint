@@ -25,13 +25,13 @@ type Option struct {
 
 type OptionFunc = func(opt *Option)
 
-// SetDropPBTZ will make Finder not save [github.com/deslittle/pinpoint/pb.Timezone] in memory
+// SetDropPBTZ will make Finder not save [github.com/deslittle/pinpoint/pb.Location] in memory
 func SetDropPBTZ(opt *Option) {
 	opt.DropPBTZ = true
 }
 
 type tzitem struct {
-	pbtz     *pb.Timezone
+	pbtz     *pb.Location
 	location *time.Location
 	name     string
 	shift    int
@@ -106,7 +106,7 @@ func NewFinderFromRawJSON(input *convert.BoundaryFile, opts ...OptionFunc) (*Fin
 	return NewFinderFromPB(timezones, opts...)
 }
 
-func NewFinderFromPB(input *pb.Timezones, opts ...OptionFunc) (*Finder, error) {
+func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 	now := time.Now()
 	items := make([]*tzitem, 0)
 	names := make([]string, 0)
@@ -117,7 +117,7 @@ func NewFinderFromPB(input *pb.Timezones, opts ...OptionFunc) (*Finder, error) {
 	}
 
 	tr := &rtree.RTreeG[*tzitem]{}
-	for _, timezone := range input.Timezones {
+	for _, timezone := range input.Locations {
 		names = append(names, timezone.Name)
 		location, err := time.LoadLocation(timezone.Name)
 		if err != nil {
@@ -184,7 +184,7 @@ func NewFinderFromPB(input *pb.Timezones, opts ...OptionFunc) (*Finder, error) {
 	return finder, nil
 }
 
-func NewFinderFromCompressed(input *pb.CompressedTimezones, opts ...OptionFunc) (*Finder, error) {
+func NewFinderFromCompressed(input *pb.CompressedLocations, opts ...OptionFunc) (*Finder, error) {
 	tzs, err := reduce.Decompress(input)
 	if err != nil {
 		return nil, err
@@ -271,7 +271,7 @@ func (f *Finder) GetTimezoneLoc(lng float64, lat float64) (*time.Location, error
 	return item[0].location, nil
 }
 
-func (f *Finder) GetTimezone(lng float64, lat float64) (*pb.Timezone, error) {
+func (f *Finder) GetTimezone(lng float64, lat float64) (*pb.Location, error) {
 	if f.opt.DropPBTZ {
 		return nil, errors.New("tzf: not suppor when reduce mem")
 	}
@@ -282,7 +282,7 @@ func (f *Finder) GetTimezone(lng float64, lat float64) (*pb.Timezone, error) {
 	return item[0].pbtz, nil
 }
 
-func (f *Finder) GetTimezoneShapeByName(name string) (*pb.Timezone, error) {
+func (f *Finder) GetTimezoneShapeByName(name string) (*pb.Location, error) {
 	for _, item := range f.items {
 		if item.name == name {
 			return item.pbtz, nil
@@ -291,11 +291,11 @@ func (f *Finder) GetTimezoneShapeByName(name string) (*pb.Timezone, error) {
 	return nil, fmt.Errorf("timezone=%v not found", name)
 }
 
-func (f *Finder) GetTimezoneShapeByShift(shift int) ([]*pb.Timezone, error) {
+func (f *Finder) GetTimezoneShapeByShift(shift int) ([]*pb.Location, error) {
 	if f.opt.DropPBTZ {
 		return nil, errors.New("tzf: not suppor when reduce mem")
 	}
-	res := make([]*pb.Timezone, 0)
+	res := make([]*pb.Location, 0)
 	for _, item := range f.items {
 		if item.shift == shift {
 			res = append(res, item.pbtz)

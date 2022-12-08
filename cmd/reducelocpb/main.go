@@ -23,7 +23,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 	if err := proto.Unmarshal(rawFile, input); err != nil {
 		panic(err)
 	}

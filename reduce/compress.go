@@ -26,12 +26,12 @@ func DecompressedPolylineBytesToPoints(input []byte) []*pb.Point {
 	return expect
 }
 
-func CompressWithPolyline(input *pb.Timezones) *pb.CompressedTimezones {
-	output := &pb.CompressedTimezones{
+func CompressWithPolyline(input *pb.Locations) *pb.CompressedLocations {
+	output := &pb.CompressedLocations{
 		Method: pb.CompressMethod_Polyline,
 	}
-	for _, timezone := range input.Timezones {
-		reducedTimezone := &pb.CompressedTimezone{
+	for _, timezone := range input.Locations {
+		reducedTimezone := &pb.CompressedLocation{
 			Name: timezone.Name,
 		}
 		for _, polygon := range timezone.Polygons {
@@ -46,12 +46,12 @@ func CompressWithPolyline(input *pb.Timezones) *pb.CompressedTimezones {
 			}
 			reducedTimezone.Data = append(reducedTimezone.Data, newPoly)
 		}
-		output.Timezones = append(output.Timezones, reducedTimezone)
+		output.Locations = append(output.Locations, reducedTimezone)
 	}
 	return output
 }
 
-func Compress(input *pb.Timezones, method pb.CompressMethod) (*pb.CompressedTimezones, error) {
+func Compress(input *pb.Locations, method pb.CompressMethod) (*pb.CompressedLocations, error) {
 	switch method {
 	case pb.CompressMethod_Polyline:
 		return CompressWithPolyline(input), nil
@@ -60,10 +60,10 @@ func Compress(input *pb.Timezones, method pb.CompressMethod) (*pb.CompressedTime
 	}
 }
 
-func DecompressWithPolyline(input *pb.CompressedTimezones) *pb.Timezones {
-	output := &pb.Timezones{}
-	for _, timezone := range input.Timezones {
-		reducedTimezone := &pb.Timezone{
+func DecompressWithPolyline(input *pb.CompressedLocations) *pb.Locations {
+	output := &pb.Locations{}
+	for _, timezone := range input.Locations {
+		reducedTimezone := &pb.Location{
 			Name: timezone.Name,
 		}
 		for _, polygon := range timezone.Data {
@@ -78,12 +78,12 @@ func DecompressWithPolyline(input *pb.CompressedTimezones) *pb.Timezones {
 			}
 			reducedTimezone.Polygons = append(reducedTimezone.Polygons, newPoly)
 		}
-		output.Timezones = append(output.Timezones, reducedTimezone)
+		output.Locations = append(output.Locations, reducedTimezone)
 	}
 	return output
 }
 
-func Decompress(input *pb.CompressedTimezones) (*pb.Timezones, error) {
+func Decompress(input *pb.CompressedLocations) (*pb.Locations, error) {
 	switch input.Method {
 	case pb.CompressMethod_Polyline:
 		return DecompressWithPolyline(input), nil

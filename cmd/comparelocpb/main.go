@@ -28,7 +28,7 @@ func initLite() {
 }
 
 func initFull() {
-	input := &pb.Timezones{}
+	input := &pb.Locations{}
 	if err := proto.Unmarshal(tzfrel.FullData, input); err != nil {
 		panic(err)
 	}

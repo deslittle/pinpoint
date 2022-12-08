@@ -14,7 +14,7 @@ import (
 var finder *pinpoint.Finder
 
 func init() {
-	input := &pb.CompressedTimezones{}
+	input := &pb.CompressedLocations{}
 	dataFile := tzfrel.LiteCompressData
 	err := proto.Unmarshal(dataFile, input)
 	if err != nil {

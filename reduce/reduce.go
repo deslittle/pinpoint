@@ -26,10 +26,10 @@ func ReducePoints(points []*pb.Point) []*pb.Point {
 	return res
 }
 
-func Do(input *pb.Timezones, skip int, precise float64, minist float64) *pb.Timezones {
-	output := &pb.Timezones{}
-	for _, timezone := range input.Timezones {
-		reducedTimezone := &pb.Timezone{
+func Do(input *pb.Locations, skip int, precise float64, minist float64) *pb.Locations {
+	output := &pb.Locations{}
+	for _, timezone := range input.Locations {
+		reducedTimezone := &pb.Location{
 			Name: timezone.Name,
 		}
 		for _, polygon := range timezone.Polygons {
@@ -44,7 +44,7 @@ func Do(input *pb.Timezones, skip int, precise float64, minist float64) *pb.Time
 			}
 			reducedTimezone.Polygons = append(reducedTimezone.Polygons, newPoly)
 		}
-		output.Timezones = append(output.Timezones, reducedTimezone)
+		output.Locations = append(output.Locations, reducedTimezone)
 	}
 	return output
 }

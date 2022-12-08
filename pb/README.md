@@ -1,3 +1,3 @@
-# TZF's Proto
+# Pinpoints's Location Proto
 
-[Probuf define](https://deslittle.github.io/tzf/pb.html)
+[Probuf define](https://deslittle.github.io/pinpoint/pb.html)

@@ -15,7 +15,7 @@ type FuzzyFinder struct {
 	m       map[maptile.Tile][]string // timezones may have common area
 }
 
-func NewFuzzyFinderFromPB(input *pb.PreindexTimezones) (*FuzzyFinder, error) {
+func NewFuzzyFinderFromPB(input *pb.PreindexLocations) (*FuzzyFinder, error) {
 	f := &FuzzyFinder{
 		m:       make(map[maptile.Tile][]string),
 		idxZoom: int(input.IdxZoom),

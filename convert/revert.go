@@ -25,7 +25,7 @@ func FromPbPolygonToGeoMultipolygon(pbpoly []*pb.Polygon) MultiPolygonCoordinate
 	return res
 }
 
-func RevertItem(input *pb.Timezone) *FeatureItem {
+func RevertItem(input *pb.Location) *FeatureItem {
 	return &FeatureItem{
 		Type: FeatureType,
 		Properties: PropertiesDefine{
@@ -39,9 +39,9 @@ func RevertItem(input *pb.Timezone) *FeatureItem {
 }
 
 // Revert could convert pb define data to GeoJSON format.
-func Revert(input *pb.Timezones) *BoundaryFile {
+func Revert(input *pb.Locations) *BoundaryFile {
 	output := &BoundaryFile{}
-	for _, timezone := range input.Timezones {
+	for _, timezone := range input.Locations {
 		item := RevertItem(timezone)
 		output.Features = append(output.Features, item)
 	}

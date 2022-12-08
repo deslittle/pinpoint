@@ -17,7 +17,7 @@ var (
 )
 
 func init() {
-	input := &pb.PreindexTimezones{}
+	input := &pb.PreindexLocations{}
 	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
 		panic(err)
 	}
@@ -43,7 +43,7 @@ func TestFuzzySupports(t *testing.T) {
 }
 
 func ExampleFuzzyFinder_GetTimezoneName() {
-	input := &pb.PreindexTimezones{}
+	input := &pb.PreindexLocations{}
 	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
 		panic(err)
 	}
