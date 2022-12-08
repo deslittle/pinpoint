@@ -1,14 +1,14 @@
-package tzf
+package pinpoint
 
 import (
-	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/pinpoint/pb"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/maptile"
 )
 
 // FuzzyFinder use a tile map to store timezone name. Data are made by
-// [github.com/deslittle/tzf/cmd/preindextzpb] which powerd by
-// [github.com/deslittle/tzf/preindex.PreIndexTimezones].
+// [github.com/deslittle/pinpoint/cmd/preindextzpb] which powerd by
+// [github.com/deslittle/pinpoint/preindex.PreIndexTimezones].
 type FuzzyFinder struct {
 	idxZoom int
 	aggZoom int

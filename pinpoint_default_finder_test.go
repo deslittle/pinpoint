@@ -1,4 +1,4 @@
-package tzf_test
+package pinpoint_test
 
 import (
 	"fmt"
@@ -6,15 +6,15 @@ import (
 	"testing"
 
 	gocitiesjson "github.com/deslittle/go-cities.json"
-	"github.com/deslittle/tzf"
+	pinpoint "github.com/deslittle/pinpoint"
 )
 
 var (
-	defaultFinder *tzf.DefaultFinder
+	defaultFinder *pinpoint.DefaultFinder
 )
 
 func init() {
-	finder, err := tzf.NewDefaultFinder()
+	finder, err := pinpoint.NewDefaultFinder()
 	if err != nil {
 		panic(err)
 	}
@@ -22,7 +22,7 @@ func init() {
 }
 
 func ExampleDefaultFinder_GetTimezoneName() {
-	finder, err := tzf.NewDefaultFinder()
+	finder, err := pinpoint.NewDefaultFinder()
 	if err != nil {
 		panic(err)
 	}

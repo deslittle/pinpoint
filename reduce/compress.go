@@ -3,7 +3,7 @@ package reduce
 import (
 	"fmt"
 
-	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/pinpoint/pb"
 	"github.com/twpayne/go-polyline"
 )
 

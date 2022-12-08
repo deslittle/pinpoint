@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/deslittle/tzf/pb"
-	"github.com/deslittle/tzf/preindex"
+	"github.com/deslittle/pinpoint/pb"
+	"github.com/deslittle/pinpoint/preindex"
 	"github.com/paulmach/orb/maptile"
 	"google.golang.org/protobuf/proto"
 )

@@ -1,10 +1,10 @@
-package tzf
+package pinpoint
 
 import (
 	"runtime"
 
+	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
-	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -2,7 +2,7 @@
 package reduce
 
 import (
-	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/pinpoint/pb"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/simplify"
 )

@@ -1,11 +1,4 @@
-# TZF: a fast timezone finder for Go. [![Go Reference](https://pkg.go.dev/badge/github.com/deslittle/tzf.svg)](https://pkg.go.dev/github.com/deslittle/tzf)
-
-![](https://github.com/deslittle/tzf/blob/gh-pages/docs/tzf-social-media.png?raw=true)
-
-NOTE: This package is also available in:
-
-- Rust, see [tzf-rs](https://github.com/deslittle/tzf-rs).
-- Python, see [tzfpy](https://github.com/deslittle/tzfpy)
+# Pinpint: a fast location finder for Go.
 
 ## Quick Start
 
@@ -18,11 +11,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/deslittle/tzf"
+	"github.com/deslittle/pinpoint"
 )
 
 func main() {
-	finder, err := tzf.NewDefaultFinder()
+	finder, err := pinpoint.NewDefaultFinder()
 	if err != nil {
 		panic(err)
 	}
@@ -39,9 +32,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/deslittle/tzf"
+	"github.com/deslittle/pinpoint"
 	tzfrel "github.com/deslittle/tzf-rel"
-	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/pinpoint/pb"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -54,7 +47,7 @@ func main() {
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
 	}
-	finder, _ := tzf.NewFinderFromPB(input)
+	finder, _ := pinpoint.NewFinderFromPB(input)
 	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
 }
 ```
@@ -62,7 +55,7 @@ func main() {
 ### CLI Tool
 
 ```bash
-go install github.com/deslittle/tzf/cmd/tzf@latest
+go install github.com/deslittle/pinpoint/cmd/tzf@latest
 tzf -lng 116.3883 -lat 39.9289
 ```
 
@@ -98,10 +91,10 @@ graph TD
     Lite --> |cmd/compresstzpb|Compressed
     Lite --> |cmd/preindextzpb|Preindex
 
-    Full --> |tzf.NewFinderFromPB|Finder
-    Lite --> |tzf.NewFinderFromPB|Finder
-    Compressed --> |tzf.NewFinderFromCompressed|Finder --> |tzf.NewDefaultFinder|DefaultFinder
-    Preindex --> |tzf.NewFuzzyFinderFromPB|FuzzyFinder --> |tzf.NewDefaultFinder|DefaultFinder
+    Full --> |pinpoint.NewFinderFromPB|Finder
+    Lite --> |pinpoint.NewFinderFromPB|Finder
+    Compressed --> |pinpoint.NewFinderFromCompressed|Finder --> |pinpoint.NewDefaultFinder|DefaultFinder
+    Preindex --> |pinpoint.NewFuzzyFinderFromPB|FuzzyFinder --> |pinpoint.NewDefaultFinder|DefaultFinder
 
     DefaultFinder --> tzfpy
 ```
@@ -129,7 +122,7 @@ raycasting algorithm execution times.
 
 ## Performance
 
-Package tzf is designed for high performance geo queries related services like
+package pinpoint is designed for high performance geo queries related services like
 weather forecast API. And most queries could return in very limited time,
 averagely like 2000 nanoseconds.
 
@@ -141,14 +134,14 @@ Here is what have been done for performance improvements:
 3. Use a fine tuned Ray Casting algorithm package
    <https://github.com/tidwall/geojson> to check if polygon contain point
 
-That's all. There is no black magics inside package tzf.
+That's all. There is no black magics inside package pinpoint.
 
-Benchmark run version <https://github.com/deslittle/tzf/releases/tag/v0.10.0>
+Benchmark run version <https://github.com/deslittle/pinpoint/releases/tag/v0.10.0>
 
 ```
 goos: darwin
 goarch: amd64
-pkg: github.com/deslittle/tzf
+pkg: github.com/deslittle/pinpoint
 cpu: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
 BenchmarkDefaultFinder_GetTimezoneName_Random_WorldCities-16    	  443942	      2583 ns/op
 BenchmarkFuzzyFinder_GetTimezoneName_Random_WorldCities-16      	 1580524	       769.3 ns/op
@@ -159,7 +152,7 @@ BenchmarkFullFinder_GetTimezoneName-16                          	  164649	      
 BenchmarkFullFinder_GetTimezoneNameAtEdge-16                    	  136508	      9382 ns/op
 BenchmarkFullFinder_GetTimezoneName_Random_WorldCities-16       	   91137	     12385 ns/op
 PASS
-ok  	github.com/deslittle/tzf	19.073s
+ok  	github.com/deslittle/pinpoint	19.073s
 ```
 
 - <https://deslittle.github.io/tzf/>:
@@ -171,13 +164,13 @@ ok  	github.com/deslittle/tzf	19.073s
 
 - <https://github.com/deslittle/tzf-rel>
   Preprocessed probuf data release repo
-- <https://github.com/deslittle/tzf-server>
+- <https://github.com/deslittle/pinpoint-server>
   HTTP Server for debug
 - <https://github.com/deslittle/tz-benchmark>
   Continuous Benchmark Compared with other packages
-- <https://github.com/deslittle/tzf-rs>
+- <https://github.com/deslittle/pinpoint-rs>
   Rust port of tzf
-- <https://github.com/deslittle/tzfpy>
+- <https://github.com/deslittle/pinpointpy>
   Rust port's Python binding
 
 ## Thanks

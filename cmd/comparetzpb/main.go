@@ -6,15 +6,15 @@ import (
 	"os"
 
 	gocitiesjson "github.com/deslittle/go-cities.json"
-	"github.com/deslittle/tzf"
+	pinpoint "github.com/deslittle/pinpoint"
+	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
-	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 
 var (
-	defaultfinder *tzf.DefaultFinder
-	fullFinder    *tzf.Finder
+	defaultfinder *pinpoint.DefaultFinder
+	fullFinder    *pinpoint.Finder
 )
 
 func init() {
@@ -23,7 +23,7 @@ func init() {
 }
 
 func initLite() {
-	_finder, _ := tzf.NewDefaultFinder()
+	_finder, _ := pinpoint.NewDefaultFinder()
 	defaultfinder = _finder
 }
 
@@ -32,7 +32,7 @@ func initFull() {
 	if err := proto.Unmarshal(tzfrel.FullData, input); err != nil {
 		panic(err)
 	}
-	_finder, _ := tzf.NewFinderFromPB(input)
+	_finder, _ := pinpoint.NewFinderFromPB(input)
 	fullFinder = _finder
 }
 

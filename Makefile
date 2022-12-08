@@ -18,7 +18,6 @@ pb:
 			$(PROTO_FILES)
 
 test:
-	golangci-lint run ./...
 	go test -json -race ./... -v -coverprofile=coverage.out  | tparse -all
 
 cover: test

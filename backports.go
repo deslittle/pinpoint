@@ -1,4 +1,4 @@
-package tzf
+package pinpoint
 
 // Backports support for not updated systems
 //

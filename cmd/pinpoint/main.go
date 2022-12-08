@@ -5,13 +5,13 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/deslittle/tzf"
+	pinpoint "github.com/deslittle/pinpoint"
+	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
-	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 
-var finder *tzf.Finder
+var finder *pinpoint.Finder
 
 func init() {
 	input := &pb.CompressedTimezones{}
@@ -20,7 +20,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	finder, err = tzf.NewFinderFromCompressed(input)
+	finder, err = pinpoint.NewFinderFromCompressed(input)
 	if err != nil {
 		panic(err)
 	}

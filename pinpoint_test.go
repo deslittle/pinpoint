@@ -1,4 +1,4 @@
-package tzf_test
+package pinpoint_test
 
 import (
 	"fmt"
@@ -9,15 +9,15 @@ import (
 	"sort"
 
 	gocitiesjson "github.com/deslittle/go-cities.json"
-	"github.com/deslittle/tzf"
+	pinpoint "github.com/deslittle/pinpoint"
+	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
-	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 
 var (
-	finder     *tzf.Finder
-	fullFinder *tzf.Finder
+	finder     *pinpoint.Finder
+	fullFinder *pinpoint.Finder
 )
 
 func init() {
@@ -30,7 +30,7 @@ func initLite() {
 	if err := proto.Unmarshal(tzfrel.LiteData, input); err != nil {
 		panic(err)
 	}
-	_finder, _ := tzf.NewFinderFromPB(input)
+	_finder, _ := pinpoint.NewFinderFromPB(input)
 	finder = _finder
 }
 
@@ -39,7 +39,7 @@ func initFull() {
 	if err := proto.Unmarshal(tzfrel.FullData, input); err != nil {
 		panic(err)
 	}
-	_finder, _ := tzf.NewFinderFromPB(input)
+	_finder, _ := pinpoint.NewFinderFromPB(input)
 	fullFinder = _finder
 }
 
@@ -93,7 +93,7 @@ func ExampleFinder_GetTimezoneName() {
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
 	}
-	finder, _ := tzf.NewFinderFromPB(input)
+	finder, _ := pinpoint.NewFinderFromPB(input)
 	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
 	// Output: Asia/Shanghai
 }
@@ -110,7 +110,7 @@ func ExampleFinder_GetTimezoneLoc() {
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
 	}
-	finder, _ := tzf.NewFinderFromPB(input)
+	finder, _ := pinpoint.NewFinderFromPB(input)
 	fmt.Println(finder.GetTimezoneLoc(116.6386, 40.0786))
 	// Output: Asia/Shanghai <nil>
 }
@@ -124,7 +124,7 @@ func ExampleFinder_GetTimezoneShapeByName() {
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
 	}
-	finder, _ := tzf.NewFinderFromPB(input)
+	finder, _ := pinpoint.NewFinderFromPB(input)
 	pbtz, err := finder.GetTimezoneShapeByName("Asia/Shanghai")
 	fmt.Printf("%v %v\n", pbtz.Name, err)
 	// Output: Asia/Shanghai <nil>
@@ -139,7 +139,7 @@ func ExampleFinder_GetTimezoneShapeByShift() {
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
 	}
-	finder, _ := tzf.NewFinderFromPB(input)
+	finder, _ := pinpoint.NewFinderFromPB(input)
 	pbtzs, _ := finder.GetTimezoneShapeByShift(28800)
 
 	pbnames := make([]string, 0)

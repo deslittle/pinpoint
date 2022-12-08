@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/deslittle/tzf/pb"
-	"github.com/deslittle/tzf/reduce"
+	"github.com/deslittle/pinpoint/pb"
+	"github.com/deslittle/pinpoint/reduce"
 	"google.golang.org/protobuf/proto"
 )
 

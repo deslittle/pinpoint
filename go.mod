@@ -1,4 +1,4 @@
-module github.com/deslittle/tzf
+module github.com/deslittle/pinpoint
 
 go 1.19
 
@@ -10,7 +10,7 @@ require (
 	github.com/tidwall/geojson v1.4.3
 	github.com/tidwall/rtree v1.9.2
 	github.com/twpayne/go-polyline v1.1.1
-	golang.org/x/exp v0.0.0-20221031165847-c99f073a8326
+	golang.org/x/exp v0.0.0-20221208044002-44028be4359e
 	google.golang.org/protobuf v1.28.1
 )
 

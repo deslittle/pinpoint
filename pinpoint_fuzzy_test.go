@@ -1,4 +1,4 @@
-package tzf_test
+package pinpoint_test
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"testing"
 
 	gocitiesjson "github.com/deslittle/go-cities.json"
-	"github.com/deslittle/tzf"
+	pinpoint "github.com/deslittle/pinpoint"
+	"github.com/deslittle/pinpoint/pb"
 	tzfrel "github.com/deslittle/tzf-rel"
-	"github.com/deslittle/tzf/pb"
 	"google.golang.org/protobuf/proto"
 )
 
 var (
-	fuzzyFinder *tzf.FuzzyFinder
+	fuzzyFinder *pinpoint.FuzzyFinder
 )
 
 func init() {
@@ -21,7 +21,7 @@ func init() {
 	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
 		panic(err)
 	}
-	_fuzzyFinder, err := tzf.NewFuzzyFinderFromPB(input)
+	_fuzzyFinder, err := pinpoint.NewFuzzyFinderFromPB(input)
 	if err != nil {
 		panic(err)
 	}
@@ -47,7 +47,7 @@ func ExampleFuzzyFinder_GetTimezoneName() {
 	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
 		panic(err)
 	}
-	finder, _ := tzf.NewFuzzyFinderFromPB(input)
+	finder, _ := pinpoint.NewFuzzyFinderFromPB(input)
 	fmt.Println(finder.GetTimezoneName(116.6386, 40.0786))
 	// Output: Asia/Shanghai
 }

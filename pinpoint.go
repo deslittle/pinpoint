@@ -1,8 +1,8 @@
-// Package tzf is a package convert (lng,lat) to timezone.
+// package pinpoint is a package convert (lng,lat) to timezone.
 //
 // Inspired by timezonefinder https://github.com/jannikmi/timezonefinder,
 // fast python package for finding the timezone of any point on earth (coordinates) offline.
-package tzf
+package pinpoint
 
 import (
 	"errors"
@@ -10,9 +10,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/deslittle/tzf/convert"
-	"github.com/deslittle/tzf/pb"
-	"github.com/deslittle/tzf/reduce"
+	"github.com/deslittle/pinpoint/convert"
+	"github.com/deslittle/pinpoint/pb"
+	"github.com/deslittle/pinpoint/reduce"
 	"github.com/tidwall/geojson/geometry"
 	"github.com/tidwall/rtree"
 )
@@ -25,7 +25,7 @@ type Option struct {
 
 type OptionFunc = func(opt *Option)
 
-// SetDropPBTZ will make Finder not save [github.com/deslittle/tzf/pb.Timezone] in memory
+// SetDropPBTZ will make Finder not save [github.com/deslittle/pinpoint/pb.Timezone] in memory
 func SetDropPBTZ(opt *Option) {
 	opt.DropPBTZ = true
 }

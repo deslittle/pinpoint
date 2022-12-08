@@ -3,7 +3,7 @@ package convert
 import (
 	"fmt"
 
-	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/pinpoint/pb"
 	"github.com/mitchellh/mapstructure"
 )
 

@@ -54,7 +54,7 @@ jobs:
           tool: "go"
           output-file-path: benchmark_result.txt
           github-token: ${{ secrets.CI_TOKEN }}
-          gh-repository: "github.com/deslittle/tzf"
+          gh-repository: "github.com/deslittle/pinpoint"
           auto-push: true
           alert-threshold: "150%"
           comment-on-alert: true

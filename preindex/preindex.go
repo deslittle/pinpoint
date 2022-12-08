@@ -24,8 +24,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/deslittle/tzf/convert"
-	"github.com/deslittle/tzf/pb"
+	"github.com/deslittle/pinpoint/convert"
+	"github.com/deslittle/pinpoint/pb"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/maptile"
 	"github.com/paulmach/orb/maptile/tilecover"
