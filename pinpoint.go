@@ -121,16 +121,7 @@ func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 		names = append(names, location.Name)
 		tz, err := time.LoadLocation(location.Name)
 		if err != nil {
-			// check if changed
-			oldname, ok := backportstz[location.Name]
-			if !ok {
-				return nil, err
-			}
-			tz, err = time.LoadLocation(oldname)
-			if err != nil {
-				return nil, err
-			}
-
+			return nil, err
 		}
 		_, tzOffset := now.In(tz).Zone()
 

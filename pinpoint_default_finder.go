@@ -4,7 +4,7 @@ import (
 	"runtime"
 
 	"github.com/deslittle/pinpoint/pb"
-	tzfrel "github.com/deslittle/tzf-rel"
+	usstates "github.com/deslittle/pinpoint-us-states"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -19,7 +19,7 @@ type DefaultFinder struct {
 func NewDefaultFinder() (*DefaultFinder, error) {
 	fuzzyFinder, err := func() (*FuzzyFinder, error) {
 		input := &pb.PreindexLocations{}
-		if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
+		if err := proto.Unmarshal(usstates.PreindexData, input); err != nil {
 			panic(err)
 		}
 		return NewFuzzyFinderFromPB(input)
@@ -30,7 +30,7 @@ func NewDefaultFinder() (*DefaultFinder, error) {
 
 	finder, err := func() (*Finder, error) {
 		input := &pb.CompressedLocations{}
-		if err := proto.Unmarshal(tzfrel.LiteCompressData, input); err != nil {
+		if err := proto.Unmarshal(usstates.LiteCompressData, input); err != nil {
 			panic(err)
 		}
 		return NewFinderFromCompressed(input, SetDropPBTZ)

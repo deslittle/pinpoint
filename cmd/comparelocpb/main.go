@@ -5,8 +5,8 @@ import (
 	"os"
 
 	pinpoint "github.com/deslittle/pinpoint"
+	usstates "github.com/deslittle/pinpoint-us-states"
 	"github.com/deslittle/pinpoint/pb"
-	tzfrel "github.com/deslittle/tzf-rel"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -27,7 +27,7 @@ func initLite() {
 
 func initFull() {
 	input := &pb.Locations{}
-	if err := proto.Unmarshal(tzfrel.FullData, input); err != nil {
+	if err := proto.Unmarshal(usstates.FullData, input); err != nil {
 		panic(err)
 	}
 	_finder, _ := pinpoint.NewFinderFromPB(input)

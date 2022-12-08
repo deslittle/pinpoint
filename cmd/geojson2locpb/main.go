@@ -1,4 +1,4 @@
-// CLI tool to convert GeoJSON based Timezone boundary to tzf's Probuf format.
+// CLI tool to convert GeoJSON based Location boundary to pinpoints's Probuf format.
 package main
 
 import (

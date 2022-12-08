@@ -33,7 +33,7 @@ import (
 	"fmt"
 
 	"github.com/deslittle/pinpoint"
-	tzfrel "github.com/deslittle/tzf-rel"
+	usstates "github.com/deslittle/pinpoint-us-states"
 	"github.com/deslittle/pinpoint/pb"
 	"google.golang.org/protobuf/proto"
 )
@@ -42,7 +42,7 @@ func main() {
 	input := &pb.Locations{}
 
 	// Full data, about 83.5MB
-	dataFile := tzfrel.FullData
+	dataFile := usstates.FullData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
@@ -55,8 +55,8 @@ func main() {
 ### CLI Tool
 
 ```bash
-go install github.com/deslittle/pinpoint/cmd/tzf@latest
-tzf -lng 116.3883 -lat 39.9289
+go install github.com/deslittle/pinpoint/cmd/pinpoint@latest
+pinpoint -lng 116.3883 -lat 39.9289
 ```
 
 ## Data
@@ -64,17 +64,19 @@ tzf -lng 116.3883 -lat 39.9289
 Original data download from
 <https://github.com/evansiroky/timezone-boundary-builder> .
 
-Preprocessed probuf data can get from <https://github.com/deslittle/tzf-rel>
+Preprocessed probuf data can get from <https://github.com/deslittle/pinpoint-us-states>
 which has Go's `embed` support. Those files are Protocol Buffers messages for
 more efficiency binary distribution like Python wheels, you can view
-the [`pb/tzinfo.proto`](./pb/tzinfo.proto) or it's [HTML format docs][pb_html]
+the [`pb/locinfo.proto`](./pb/locinfo.proto) or it's [HTML format docs][loc_html]
 for the internal format info.
 
-tzf's data pipeline can be drew as:
+pinpoint's data pipeline can be drew as:
 
 ```mermaid
 graph TD
-    Raw[GeoJSON from evansiroky/timezone-boundary-builder]
+    Shp[Shapefile from US Census Bureau]
+    Geobuf[Geobuf]
+    GeoJSON[GeoJSON]
     Full[Full: Probuf based data]
     Lite[Lite: smaller of Full data]
     Compressed[Compressed: Lite compressed via Polyline]
@@ -84,19 +86,18 @@ graph TD
     FuzzyFinder[FuzzyFinder: Tile based Finder]
     DefaultFinder[DefaultFinder: combine FuzzyFinder and Compressed Finder]
 
-    tzfpy[tzfpy: tzf's Python binding]
-
-    Raw --> |cmd/geojson2tzpb|Full
-    Full --> |cmd/reducetzpb|Lite
-    Lite --> |cmd/compresstzpb|Compressed
-    Lite --> |cmd/preindextzpb|Preindex
+    Shp --> |mapbox/shp2geobuf|Geobuf
+    Geobuf --> |mapbox/geobuf2json|GeoJSON
+    GeoJSON --> |cmd/geojson2locpb|Full
+    Full --> |cmd/reducelocpb|Lite
+    Lite --> |cmd/compresslocpb|Compressed
+    Lite --> |cmd/preindexlocpb|Preindex
 
     Full --> |pinpoint.NewFinderFromPB|Finder
     Lite --> |pinpoint.NewFinderFromPB|Finder
     Compressed --> |pinpoint.NewFinderFromCompressed|Finder --> |pinpoint.NewDefaultFinder|DefaultFinder
     Preindex --> |pinpoint.NewFuzzyFinderFromPB|FuzzyFinder --> |pinpoint.NewDefaultFinder|DefaultFinder
 
-    DefaultFinder --> tzfpy
 ```
 
 The [full data(~80MB)][full-link] could work anywhere but requires more memory usage.
@@ -113,11 +114,11 @@ The [preindex data(~1.78MB)][preindex-link] are many tiles.
 It's used inside the `DefaultFinder`, which built on `FuzzyFinder`, to reduce
 raycasting algorithm execution times.
 
-[pb_html]: https://deslittle.github.io/tzf/pb.html
-[full-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.pb
-[lite-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.reduce.pb
-[preindex-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.reduce.preindex.pb
-[compressd-link]: https://github.com/deslittle/tzf-rel/blob/main/combined-with-oceans.reduce.compress.pb
+[pb_html]: https://deslittle.github.io/pinpoint/pb.html
+[full-link]: https://github.com/deslittle/pinpoint-us-states/blob/main/us-states.pb
+[lite-link]: https://github.com/deslittle/pinpoint-us-states/blob/main/us-states.reduce.pb
+[preindex-link]: https://github.com/deslittle/pinpoint-us-states/blob/main/us-states.reduce.preindex.pb
+[compressd-link]: https://github.com/deslittle/pinpoint-us-states/blob/main/us-states.reduce.compress.pb
 [points_not_equal]: https://geojson.io/#id=gist:deslittle/2d958e7f0a279a7411c04907f255955a
 
 ## Performance
@@ -155,27 +156,19 @@ PASS
 ok  	github.com/deslittle/pinpoint	19.073s
 ```
 
-- <https://deslittle.github.io/tzf/>:
+- <https://deslittle.github.io/pinpoint/>:
   Continuous Benchmark Result
-- <https://deslittle.github.io/tz-benchmark/>
+- <https://deslittle.github.io/pinpoint-benchmark/>
   Continuous Benchmark Compared with other packages
 
 ## Related Repos
 
-- <https://github.com/deslittle/tzf-rel>
+- <https://github.com/deslittle/pinpoint-us-states>
   Preprocessed probuf data release repo
 - <https://github.com/deslittle/pinpoint-server>
   HTTP Server for debug
-- <https://github.com/deslittle/tz-benchmark>
-  Continuous Benchmark Compared with other packages
-- <https://github.com/deslittle/pinpoint-rs>
-  Rust port of tzf
-- <https://github.com/deslittle/pinpointpy>
-  Rust port's Python binding
 
 ## Thanks
 
 - <https://github.com/paulmach/orb>
 - <https://github.com/tidwall/geojson>
-- <https://github.com/jannikmi/timezonefinder>
-- <https://github.com/evansiroky/timezone-boundary-builder>

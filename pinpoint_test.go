@@ -8,8 +8,8 @@ import (
 	"sort"
 
 	pinpoint "github.com/deslittle/pinpoint"
+	usstates "github.com/deslittle/pinpoint-us-states"
 	"github.com/deslittle/pinpoint/pb"
-	tzfrel "github.com/deslittle/tzf-rel"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -25,7 +25,7 @@ func init() {
 
 func initLite() {
 	input := &pb.Locations{}
-	if err := proto.Unmarshal(tzfrel.LiteData, input); err != nil {
+	if err := proto.Unmarshal(usstates.LiteData, input); err != nil {
 		panic(err)
 	}
 	_finder, _ := pinpoint.NewFinderFromPB(input)
@@ -34,7 +34,7 @@ func initLite() {
 
 func initFull() {
 	input := &pb.Locations{}
-	if err := proto.Unmarshal(tzfrel.FullData, input); err != nil {
+	if err := proto.Unmarshal(usstates.FullData, input); err != nil {
 		panic(err)
 	}
 	_finder, _ := pinpoint.NewFinderFromPB(input)
@@ -85,10 +85,10 @@ func ExampleFinder_GetLocationName() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
-	dataFile := tzfrel.LiteData
+	dataFile := usstates.LiteData
 
 	// Full data, about 83.5MB
-	// dataFile := tzfrel.FullData
+	// dataFile := usstates.FullData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
@@ -102,10 +102,10 @@ func ExampleFinder_GetLocationTz() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
-	dataFile := tzfrel.LiteData
+	dataFile := usstates.LiteData
 
 	// Full data, about 83.5MB
-	// dataFile := tzfrel.FullData
+	// dataFile := usstates.FullData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
@@ -119,14 +119,14 @@ func ExampleFinder_GetLocationShapeByName() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
-	dataFile := tzfrel.LiteData
+	dataFile := usstates.LiteData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
 	pbloc, err := finder.GetLocationShapeByName("Asia/Shanghai")
-	fmt.Printf("%v %v\n", pbloc.Name, err)
+	fmt.Printf("%v %v\n", pbloc.GetName(), err)
 	// Output: Asia/Shanghai <nil>
 }
 
@@ -134,7 +134,7 @@ func ExampleFinder_GetLocationShapeByShift() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
-	dataFile := tzfrel.LiteData
+	dataFile := usstates.LiteData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
@@ -144,7 +144,7 @@ func ExampleFinder_GetLocationShapeByShift() {
 
 	pbnames := make([]string, 0)
 	for _, pbloc := range pblocs {
-		pbnames = append(pbnames, pbloc.Name)
+		pbnames = append(pbnames, pbloc.GetName())
 	}
 	sort.Strings(pbnames)
 

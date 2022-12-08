@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	pinpoint "github.com/deslittle/pinpoint"
+	usstates "github.com/deslittle/pinpoint-us-states"
 	"github.com/deslittle/pinpoint/pb"
-	tzfrel "github.com/deslittle/tzf-rel"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -16,7 +16,7 @@ var (
 
 func init() {
 	input := &pb.PreindexLocations{}
-	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
+	if err := proto.Unmarshal(usstates.PreindexData, input); err != nil {
 		panic(err)
 	}
 	_fuzzyFinder, err := pinpoint.NewFuzzyFinderFromPB(input)
@@ -42,7 +42,7 @@ func init() {
 
 func ExampleFuzzyFinder_GetLocationName() {
 	input := &pb.PreindexLocations{}
-	if err := proto.Unmarshal(tzfrel.PreindexData, input); err != nil {
+	if err := proto.Unmarshal(usstates.PreindexData, input); err != nil {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFuzzyFinderFromPB(input)

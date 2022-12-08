@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	pinpoint "github.com/deslittle/pinpoint"
+	usstates "github.com/deslittle/pinpoint-us-states"
 	"github.com/deslittle/pinpoint/pb"
-	tzfrel "github.com/deslittle/tzf-rel"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -15,7 +15,7 @@ var finder *pinpoint.Finder
 
 func init() {
 	input := &pb.CompressedLocations{}
-	dataFile := tzfrel.LiteCompressData
+	dataFile := usstates.LiteCompressData
 	err := proto.Unmarshal(dataFile, input)
 	if err != nil {
 		panic(err)
