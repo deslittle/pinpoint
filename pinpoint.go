@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"sort"
-	"time"
 
 	"github.com/deslittle/pinpoint/convert"
 	"github.com/deslittle/pinpoint/pb"
@@ -29,13 +28,11 @@ func SetDropPBLoc(opt *Option) {
 }
 
 type locitem struct {
-	pbloc    *pb.Location
-	location *time.Location
-	name     string
-	shift    int
-	polys    []*geometry.Poly
-	min      [2]float64
-	max      [2]float64
+	pbloc *pb.Location
+	name  string
+	polys []*geometry.Poly
+	min   [2]float64
+	max   [2]float64
 }
 
 func newNotFoundErr(lng float64, lat float64) error {
@@ -105,7 +102,7 @@ func NewFinderFromRawJSON(input *convert.BoundaryFile, opts ...OptionFunc) (*Fin
 }
 
 func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
-	now := time.Now()
+
 	items := make([]*locitem, 0)
 	names := make([]string, 0)
 
@@ -117,16 +114,9 @@ func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 	tr := &rtree.RTreeG[*locitem]{}
 	for _, location := range input.Locations {
 		names = append(names, location.Name)
-		tz, err := time.LoadLocation(location.Name)
-		if err != nil {
-			return nil, err
-		}
-		_, tzOffset := now.In(tz).Zone()
 
 		newItem := &locitem{
-			location: tz,
-			shift:    tzOffset,
-			name:     location.Name,
+			name: location.Name,
 		}
 		if !opt.DropPBLoc {
 			newItem.pbloc = location
@@ -191,7 +181,7 @@ func getRTreeRangeShifed(lng float64, lat float64) float64 {
 func (f *Finder) getItemInRanges(lng float64, lat float64) []*locitem {
 	candicates := []*locitem{}
 
-	// TODO(deslittle): fix this range
+	// TODO(tzf): fix this range
 	shifted := getRTreeRangeShifed(lng, lat)
 	f.tr.Search([2]float64{lng - shifted, lat - shifted}, [2]float64{lng + shifted, lat + shifted}, func(min, max [2]float64, data *locitem) bool {
 		candicates = append(candicates, data)
@@ -252,14 +242,6 @@ func (f *Finder) GetLocationNames(lng float64, lat float64) ([]string, error) {
 	return ret, nil
 }
 
-func (f *Finder) GetLocationTz(lng float64, lat float64) (*time.Location, error) {
-	item, err := f.getItem(lng, lat)
-	if err != nil {
-		return nil, err
-	}
-	return item[0].location, nil
-}
-
 func (f *Finder) GetLocation(lng float64, lat float64) (*pb.Location, error) {
 	if f.opt.DropPBLoc {
 		return nil, errors.New("pinpoint: not suppor when reduce mem")
@@ -278,22 +260,6 @@ func (f *Finder) GetLocationShapeByName(name string) (*pb.Location, error) {
 		}
 	}
 	return nil, fmt.Errorf("location=%v not found", name)
-}
-
-func (f *Finder) GetLocationShapeByShift(shift int) ([]*pb.Location, error) {
-	if f.opt.DropPBLoc {
-		return nil, errors.New("pinpoint: not suppor when reduce mem")
-	}
-	res := make([]*pb.Location, 0)
-	for _, item := range f.items {
-		if item.shift == shift {
-			res = append(res, item.pbloc)
-		}
-	}
-	if len(res) == 0 {
-		return nil, fmt.Errorf("shift=%v not found", shift)
-	}
-	return res, nil
 }
 
 func (f *Finder) LocationNames() []string {

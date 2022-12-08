@@ -22,8 +22,8 @@ type GeometryDefine struct {
 }
 
 type PropertiesDefine struct {
-	statefp string `json:"STATEFP"`
-	name    string `json:"NAME"`
+	Statefp string `json:"STATEFP"`
+	Name    string `json:"NAME"`
 }
 
 type FeatureItem struct {
@@ -42,9 +42,10 @@ func Do(input *BoundaryFile) (*pb.Locations, error) {
 
 	for _, item := range input.Features {
 		pblocItem := &pb.Location{
-			Name: item.Properties.name,
-			Id:   item.Properties.statefp,
+			Name: item.Properties.Name,
+			Id:   item.Properties.Statefp,
 		}
+		fmt.Printf("loc proporties: %v", item.Properties)
 
 		var coordinates MultiPolygonCoordinates
 

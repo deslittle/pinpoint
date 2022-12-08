@@ -2,10 +2,7 @@ package pinpoint_test
 
 import (
 	"fmt"
-	"strings"
 	"testing"
-
-	"sort"
 
 	pinpoint "github.com/deslittle/pinpoint"
 	usstates "github.com/deslittle/pinpoint-us-states"
@@ -94,25 +91,13 @@ func ExampleFinder_GetLocationName() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
-	// Output: Asia/Shanghai
-}
 
-func ExampleFinder_GetLocationTz() {
-	input := &pb.Locations{}
-
-	// Lite data, about 16.7MB
-	dataFile := usstates.LiteData
-
-	// Full data, about 83.5MB
-	// dataFile := usstates.FullData
-
-	if err := proto.Unmarshal(dataFile, input); err != nil {
-		panic(err)
+	fmt.Printf("finder: %+#v\n", finder)
+	for _, loc := range finder.LocationNames() {
+		fmt.Println(loc)
 	}
-	finder, _ := pinpoint.NewFinderFromPB(input)
-	fmt.Println(finder.GetLocationTz(116.6386, 40.0786))
-	// Output: Asia/Shanghai <nil>
+	fmt.Println(finder.GetLocationName(-74.03440821618342, 40.71579135708155))
+	// Output: Asia/Shanghai
 }
 
 func ExampleFinder_GetLocationShapeByName() {
@@ -128,26 +113,4 @@ func ExampleFinder_GetLocationShapeByName() {
 	pbloc, err := finder.GetLocationShapeByName("Asia/Shanghai")
 	fmt.Printf("%v %v\n", pbloc.GetName(), err)
 	// Output: Asia/Shanghai <nil>
-}
-
-func ExampleFinder_GetLocationShapeByShift() {
-	input := &pb.Locations{}
-
-	// Lite data, about 16.7MB
-	dataFile := usstates.LiteData
-
-	if err := proto.Unmarshal(dataFile, input); err != nil {
-		panic(err)
-	}
-	finder, _ := pinpoint.NewFinderFromPB(input)
-	pblocs, _ := finder.GetLocationShapeByShift(28800)
-
-	pbnames := make([]string, 0)
-	for _, pbloc := range pblocs {
-		pbnames = append(pbnames, pbloc.GetName())
-	}
-	sort.Strings(pbnames)
-
-	fmt.Println(strings.Join(pbnames, ","))
-	// Output: Asia/Brunei,Asia/Choibalsan,Asia/Hong_Kong,Asia/Irkutsk,Asia/Kuala_Lumpur,Asia/Kuching,Asia/Macau,Asia/Makassar,Asia/Manila,Asia/Shanghai,Asia/Singapore,Asia/Taipei,Asia/Ulaanbaatar,Australia/Perth,Etc/GMT-8
 }
