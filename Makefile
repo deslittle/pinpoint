@@ -23,8 +23,8 @@ test:
 cover: test
 	go tool cover -html=coverage.out -o=coverage.html
 
-comparetzpb_gen:
-	go run cmd/comparetzpb/main.go
+comparelocpb_gen:
+	go run cmd/comparelocpb/main.go
 
 bench:
 	go test -bench=. ./...

@@ -22,7 +22,8 @@ type GeometryDefine struct {
 }
 
 type PropertiesDefine struct {
-	Tzid string `json:"tzid"`
+	statefp string `json:"STATEFP"`
+	name    string `json:"NAME"`
 }
 
 type FeatureItem struct {
@@ -40,8 +41,9 @@ func Do(input *BoundaryFile) (*pb.Locations, error) {
 	output := make([]*pb.Location, 0)
 
 	for _, item := range input.Features {
-		pbtzItem := &pb.Location{
-			Name: item.Properties.Tzid,
+		pblocItem := &pb.Location{
+			Name: item.Properties.name,
+			Id:   item.Properties.statefp,
 		}
 
 		var coordinates MultiPolygonCoordinates
@@ -120,8 +122,8 @@ func Do(input *BoundaryFile) (*pb.Locations, error) {
 			polygons = append(polygons, newpbPoly)
 		}
 
-		pbtzItem.Polygons = polygons
-		output = append(output, pbtzItem)
+		pblocItem.Polygons = polygons
+		output = append(output, pblocItem)
 	}
 
 	return &pb.Locations{

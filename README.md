@@ -61,9 +61,6 @@ pinpoint -lng 116.3883 -lat 39.9289
 
 ## Data
 
-Original data download from
-<https://github.com/evansiroky/timezone-boundary-builder> .
-
 Preprocessed probuf data can get from <https://github.com/deslittle/pinpoint-us-states>
 which has Go's `embed` support. Those files are Protocol Buffers messages for
 more efficiency binary distribution like Python wheels, you can view

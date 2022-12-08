@@ -1,7 +1,5 @@
 // package pinpoint is a package convert (lng,lat) to location.
-//
-// Inspired by timezonefinder https://github.com/jannikmi/timezonefinder,
-// fast python package for finding the timezone of any point on earth (coordinates) offline.
+
 package pinpoint
 
 import (
@@ -25,8 +23,8 @@ type Option struct {
 
 type OptionFunc = func(opt *Option)
 
-// SetDropPBTZ will make Finder not save [github.com/deslittle/pinpoint/pb.Location] in memory
-func SetDropPBTZ(opt *Option) {
+// SetDropPBLoc will make Finder not save [github.com/deslittle/pinpoint/pb.Location] in memory
+func SetDropPBLoc(opt *Option) {
 	opt.DropPBLoc = true
 }
 
@@ -176,11 +174,11 @@ func NewFinderFromPB(input *pb.Locations, opts ...OptionFunc) (*Finder, error) {
 }
 
 func NewFinderFromCompressed(input *pb.CompressedLocations, opts ...OptionFunc) (*Finder, error) {
-	tzs, err := reduce.Decompress(input)
+	locs, err := reduce.Decompress(input)
 	if err != nil {
 		return nil, err
 	}
-	return NewFinderFromPB(tzs, opts...)
+	return NewFinderFromPB(locs, opts...)
 }
 
 func getRTreeRangeShifed(lng float64, lat float64) float64 {

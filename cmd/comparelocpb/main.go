@@ -77,6 +77,11 @@ func main() {
 			})
 		}
 	}
+
+	// (deslittle): I didn't really want this extra dependancy to this list of cities
+	// since it's not needed, but I wanted to leave here in case I wanted to
+	// do something similar in the future.
+	//
 	// for _, city := range gocitiesjson.Cities {
 	// 	_lng := city.Lng
 	// 	_lat := city.Lat

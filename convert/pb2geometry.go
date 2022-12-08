@@ -5,9 +5,9 @@ import (
 	"github.com/tidwall/geojson/geometry"
 )
 
-func FromTimezonePBToGeometryPoly(timezone *pb.Location) []*geometry.Poly {
+func FromLocationPBToGeometryPoly(location *pb.Location) []*geometry.Poly {
 	ret := []*geometry.Poly{}
-	for _, polygon := range timezone.Polygons {
+	for _, polygon := range location.Polygons {
 
 		newPoints := make([]geometry.Point, 0)
 		for _, point := range polygon.Points {

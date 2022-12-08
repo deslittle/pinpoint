@@ -1,4 +1,4 @@
-// CLI tool to preindex timezone shape.
+// CLI tool to preindex location shape.
 package main
 
 import (
@@ -30,9 +30,9 @@ func main() {
 		panic(err)
 	}
 
-	output := preindex.PreIndexTimezones(input, maptile.Zoom(idxZoom), maptile.Zoom(aggZoom), maptile.Zoom(maxZoomLevelToKeep), layerDrop)
+	output := preindex.PreIndexLocations(input, maptile.Zoom(idxZoom), maptile.Zoom(aggZoom), maptile.Zoom(maxZoomLevelToKeep), layerDrop)
 
-	// file := preindex.PreIndexTimezonesToGeoJSON(output)
+	// file := preindex.PreIndexLocationsToGeoJSON(output)
 	// err = os.WriteFile("preindex_tiles.geojson", file, 0644)
 	// if err != nil {
 	// 	panic(err)

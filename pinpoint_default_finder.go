@@ -3,8 +3,8 @@ package pinpoint
 import (
 	"runtime"
 
-	"github.com/deslittle/pinpoint/pb"
 	usstates "github.com/deslittle/pinpoint-us-states"
+	"github.com/deslittle/pinpoint/pb"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -33,7 +33,7 @@ func NewDefaultFinder() (*DefaultFinder, error) {
 		if err := proto.Unmarshal(usstates.LiteCompressData, input); err != nil {
 			panic(err)
 		}
-		return NewFinderFromCompressed(input, SetDropPBTZ)
+		return NewFinderFromCompressed(input, SetDropPBLoc)
 	}()
 	if err != nil {
 		return nil, err

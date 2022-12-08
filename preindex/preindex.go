@@ -13,7 +13,7 @@
 //
 // Preindex's logic is very simple, generate map tiles around a multi polygon,
 // and exclude 1/2 edge layer, then merge to upper tiles. Then dumps all the tiles's
-// X/Y/Z and timezone to Protocol Buffer based data.
+// X/Y/Z and location to Protocol Buffer based data.
 //
 // A sample image of output tiles show on maps:
 // https://user-images.githubusercontent.com/13536789/200174943-7d40661e-bda5-4b79-a867-ec637e245a49.png
@@ -33,7 +33,7 @@ import (
 	"golang.org/x/exp/maps"
 )
 
-// Drop most outside layer of tile, since tile may cover area not included in timezone.
+// Drop most outside layer of tile, since tile may cover area not included in location.
 func DropEdgeTiles(tiles []maptile.Tile) []maptile.Tile {
 	ret := []maptile.Tile{}
 	tilehash := map[maptile.Tile]bool{}
@@ -77,7 +77,7 @@ func DropEdgeTiles(tiles []maptile.Tile) []maptile.Tile {
 }
 
 func EnsureInside(geopolys []*geometry.Poly, tiles []maptile.Tile) []maptile.Tile {
-	insideTZTiles := []maptile.Tile{}
+	insideLocTiles := []maptile.Tile{}
 	for _, tile := range tiles {
 		minLng := tile.Bound().Min.Lon()
 		minLat := tile.Bound().Min.Lat()
@@ -103,16 +103,16 @@ func EnsureInside(geopolys []*geometry.Poly, tiles []maptile.Tile) []maptile.Til
 				}
 			}
 		}
-		insideTZTiles = append(insideTZTiles, tile)
+		insideLocTiles = append(insideLocTiles, tile)
 	}
-	return insideTZTiles
+	return insideLocTiles
 }
 
-// PreIndexTimezone will gen tiles at idxZoom level and merge up to aggZoom.
+// PreIndexLocation will gen tiles at idxZoom level and merge up to aggZoom.
 //
 // The `idxZoom` level tiles will be removed before final return.
-func PreIndexTimezone(input *pb.Location, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) ([]*pb.PreindexLocation, error) {
-	// Generate all tiles event not included in timezone shape
+func PreIndexLocation(input *pb.Location, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) ([]*pb.PreindexLocation, error) {
+	// Generate all tiles event not included in location shape
 	tiles := []maptile.Tile{}
 	for _, poly := range input.Polygons {
 		orbPoly := orb.Polygon{}
@@ -155,17 +155,17 @@ func PreIndexTimezone(input *pb.Location, idxZoom, aggZoom, maxZoomLevelToKeep m
 	}
 
 	// Iter all tile's polygon if inside original polygon
-	geopolys := convert.FromTimezonePBToGeometryPoly(input)
-	insideTZTiles := EnsureInside(geopolys, tiles)
+	geopolys := convert.FromLocationPBToGeometryPoly(input)
+	insideLocTiles := EnsureInside(geopolys, tiles)
 
 	// Drop edge tiles
 	for i := 0; i < dropEdgeLayger; i++ {
-		insideTZTiles = DropEdgeTiles(insideTZTiles)
+		insideLocTiles = DropEdgeTiles(insideLocTiles)
 	}
 
 	// Gen tileset
 	newtileset := maptile.Set{}
-	for _, tile := range insideTZTiles {
+	for _, tile := range insideLocTiles {
 		newtileset[tile] = true
 	}
 
@@ -195,25 +195,25 @@ func PreIndexTimezone(input *pb.Location, idxZoom, aggZoom, maxZoomLevelToKeep m
 	return ret, nil
 }
 
-func PreIndexTimezones(input *pb.Locations, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) *pb.PreindexLocations {
+func PreIndexLocations(input *pb.Locations, idxZoom, aggZoom, maxZoomLevelToKeep maptile.Zoom, dropEdgeLayger int) *pb.PreindexLocations {
 	ret := &pb.PreindexLocations{
 		IdxZoom: int32(idxZoom),
 		AggZoom: int32(aggZoom),
 		Keys:    make([]*pb.PreindexLocation, 0),
 	}
-	for _, tz := range input.Locations {
+	for _, loc := range input.Locations {
 		start := time.Now()
-		preindexes, err := PreIndexTimezone(tz, idxZoom, aggZoom, maxZoomLevelToKeep, dropEdgeLayger)
+		preindexes, err := PreIndexLocation(loc, idxZoom, aggZoom, maxZoomLevelToKeep, dropEdgeLayger)
 		if err == nil {
 			ret.Keys = append(ret.Keys, preindexes...)
 		}
 		since := time.Since(start)
-		fmt.Println(tz.Name, since)
+		fmt.Println(loc.Name, since)
 	}
 	return ret
 }
 
-func PreIndexTimezonesToGeoJSON(input *pb.PreindexLocations) []byte {
+func PreIndexLocationsToGeoJSON(input *pb.PreindexLocations) []byte {
 	tileset := maptile.Set{}
 	for _, key := range input.Keys {
 		tileset[maptile.New(uint32(key.X), uint32(key.Y), maptile.Zoom(key.Z))] = true

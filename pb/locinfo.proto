@@ -49,6 +49,7 @@ message Polygon {
 message Location {
   repeated Polygon polygons = 1;
   string name = 2;
+  string id = 3;
 }
 
 message Locations {

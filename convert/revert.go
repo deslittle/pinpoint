@@ -29,7 +29,8 @@ func RevertItem(input *pb.Location) *FeatureItem {
 	return &FeatureItem{
 		Type: FeatureType,
 		Properties: PropertiesDefine{
-			Tzid: input.Name,
+			statefp: input.Id,
+			name:    input.Name,
 		},
 		Geometry: GeometryDefine{
 			Type:        MultiPolygonType,
@@ -41,8 +42,8 @@ func RevertItem(input *pb.Location) *FeatureItem {
 // Revert could convert pb define data to GeoJSON format.
 func Revert(input *pb.Locations) *BoundaryFile {
 	output := &BoundaryFile{}
-	for _, timezone := range input.Locations {
-		item := RevertItem(timezone)
+	for _, location := range input.Locations {
+		item := RevertItem(location)
 		output.Features = append(output.Features, item)
 	}
 	output.Type = "FeatureCollection"

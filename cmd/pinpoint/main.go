@@ -1,11 +1,11 @@
-// tzf-cli tool for local query.
+// pinpoint-cli tool for local query.
 package main
 
 import (
 	"flag"
 	"fmt"
 
-	pinpoint "github.com/deslittle/pinpoint"
+	"github.com/deslittle/pinpoint"
 	usstates "github.com/deslittle/pinpoint-us-states"
 	"github.com/deslittle/pinpoint/pb"
 	"google.golang.org/protobuf/proto"
