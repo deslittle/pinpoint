@@ -47,8 +47,9 @@ func ExampleFuzzyFinder_GetLocationName() {
 	}
 	finder, _ := pinpoint.NewFuzzyFinderFromPB(input)
 
-	fmt.Println(finder.GetLocationName(-74.03440821618342, 40.71579135708155))
-	// Output: New Jersey <nil>
+	loc := finder.GetLocationName(-74.666645, 40.736032)
+	fmt.Println(loc)
+	// Output: New Jersey
 }
 
 func BenchmarkFuzzyFinder_GetLocationName_Random_WorldCities(b *testing.B) {
