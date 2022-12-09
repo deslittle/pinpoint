@@ -24,8 +24,8 @@ func ExampleDefaultFinder_GetLocationName() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
-	// Output: Asia/Shanghai
+	fmt.Println(finder.GetLocationName(-74.03440821618342, 40.71579135708155))
+	// Output: New Jersey
 }
 
 func BenchmarkDefaultFinder_GetLocationName_Random_WorldCities(b *testing.B) {

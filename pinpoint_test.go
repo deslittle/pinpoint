@@ -82,10 +82,10 @@ func ExampleFinder_GetLocationName() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
-	dataFile := usstates.LiteData
+	//dataFile := usstates.LiteData
 
 	// Full data, about 83.5MB
-	// dataFile := usstates.FullData
+	dataFile := usstates.FullData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
@@ -101,7 +101,7 @@ func ExampleFinder_GetLocationShapeByName() {
 	input := &pb.Locations{}
 
 	// Lite data, about 16.7MB
-	dataFile := usstates.LiteData
+	dataFile := usstates.FullData
 
 	if err := proto.Unmarshal(dataFile, input); err != nil {
 		panic(err)
@@ -109,5 +109,5 @@ func ExampleFinder_GetLocationShapeByName() {
 	finder, _ := pinpoint.NewFinderFromPB(input)
 	pbloc, err := finder.GetLocationShapeByName("New Jersey")
 	fmt.Printf("%v %v\n", pbloc.GetName(), err)
-	// Output: 45 <nil>
+	// Output: New Jersey <nil>
 }
