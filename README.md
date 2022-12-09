@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(finder.GetLocationName(116.6386, 40.0786))
+	fmt.Println(finder.GetLocationName(116.6387, 40.0786))
 }
 ```
 
