@@ -95,7 +95,7 @@ func ExampleFinder_GetLocationName() {
 	// Need to use a point not so close to New York border for Fuzzy Search
 	loc, err := finder.GetLocation(-74.03440821618342, 40.71579135708155)
 	fmt.Printf("%v %v\n", loc.GetName(), err)
-	// Output: New Jersey <nil>
+	// Output: 34 <nil>
 }
 
 func ExampleFinder_GetLocationShapeByName() {
@@ -108,7 +108,7 @@ func ExampleFinder_GetLocationShapeByName() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	pbloc, err := finder.GetLocationShapeByName("New Jersey")
+	pbloc, err := finder.GetLocationShapeByName("34")
 	fmt.Printf("%v %v\n", pbloc.GetName(), err)
-	// Output: New Jersey <nil>
+	// Output: 34 <nil>
 }

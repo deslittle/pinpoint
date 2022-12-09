@@ -25,7 +25,7 @@ func ExampleDefaultFinder_GetLocationName() {
 		panic(err)
 	}
 	fmt.Println(finder.GetLocationName(-74.03440821618342, 40.71579135708155))
-	// Output: New Jersey
+	// Output: 34
 }
 
 func BenchmarkDefaultFinder_GetLocationName_Random_WorldCities(b *testing.B) {

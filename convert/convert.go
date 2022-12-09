@@ -43,7 +43,6 @@ func Do(input *BoundaryFile) (*pb.Locations, error) {
 		pblocItem := &pb.Location{
 			Name: item.Properties.Name,
 		}
-		fmt.Printf("loc proporties: %v", item.Properties)
 
 		var coordinates MultiPolygonCoordinates
 
