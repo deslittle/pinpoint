@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package pb;
+package pinpoint.pb.v1;
 
 option go_package = "github.com/deslittle/pinpoint/pb;pb";
 
