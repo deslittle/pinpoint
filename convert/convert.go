@@ -22,7 +22,7 @@ type GeometryDefine struct {
 }
 
 type PropertiesDefine struct {
-	Name string `json:"NAME"`
+	Name string `json:"STATEFP"`
 }
 
 type FeatureItem struct {
