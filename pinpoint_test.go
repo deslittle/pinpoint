@@ -92,12 +92,9 @@ func ExampleFinder_GetLocationName() {
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
 
-	fmt.Printf("finder: %+#v\n", finder)
-	for _, loc := range finder.LocationNames() {
-		fmt.Println(loc)
-	}
-	fmt.Println(finder.GetLocationName(-74.03440821618342, 40.71579135708155))
-	// Output: Asia/Shanghai
+	loc, err := finder.GetLocation(-74.03440821618342, 40.71579135708155)
+	fmt.Printf("%v %v\n", loc.GetName(), err)
+	// Output: New Jersey <nil>
 }
 
 func ExampleFinder_GetLocationShapeByName() {
@@ -110,7 +107,7 @@ func ExampleFinder_GetLocationShapeByName() {
 		panic(err)
 	}
 	finder, _ := pinpoint.NewFinderFromPB(input)
-	pbloc, err := finder.GetLocationShapeByName("Asia/Shanghai")
+	pbloc, err := finder.GetLocationShapeByName("New Jersey")
 	fmt.Printf("%v %v\n", pbloc.GetName(), err)
-	// Output: Asia/Shanghai <nil>
+	// Output: 45 <nil>
 }

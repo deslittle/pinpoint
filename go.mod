@@ -3,7 +3,7 @@ module github.com/deslittle/pinpoint
 go 1.19
 
 require (
-	github.com/deslittle/pinpoint-us-states v0.0.2-0.20221208222302-ee65349c37f0
+	github.com/deslittle/pinpoint-us-states v0.1.1-0.20221208235323-249e1e9462be
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/paulmach/orb v0.7.1
 	github.com/tidwall/geojson v1.4.3

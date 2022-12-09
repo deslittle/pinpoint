@@ -36,7 +36,7 @@ type locitem struct {
 }
 
 func newNotFoundErr(lng float64, lat float64) error {
-	return fmt.Errorf("tzf: not found for %v,%v", lng, lat)
+	return fmt.Errorf("pinpoint: not found for %v,%v", lng, lat)
 }
 
 func (i *locitem) ContainsPoint(p geometry.Point) bool {

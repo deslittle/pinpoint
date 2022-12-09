@@ -29,8 +29,7 @@ func RevertItem(input *pb.Location) *FeatureItem {
 	return &FeatureItem{
 		Type: FeatureType,
 		Properties: PropertiesDefine{
-			Statefp: input.Id,
-			Name:    input.Name,
+			Name: input.Name,
 		},
 		Geometry: GeometryDefine{
 			Type:        MultiPolygonType,
