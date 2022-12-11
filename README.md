@@ -1,4 +1,4 @@
-# Pinpint: a fast location finder for Go.
+# Pinpoint: a fast location finder for Go.
 
 ## Quick Start
 
