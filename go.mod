@@ -4,9 +4,11 @@ go 1.19
 
 require (
 	github.com/deslittle/pinpoint-us-states v0.1.5
+	github.com/loov/hrtime v1.0.3
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/paulmach/orb v0.7.1
 	github.com/tidwall/geojson v1.4.3
+	github.com/tidwall/lotsa v1.0.3
 	github.com/tidwall/rtree v1.9.2
 	github.com/twpayne/go-polyline v1.1.1
 	golang.org/x/exp v0.0.0-20221208044002-44028be4359e

@@ -60,3 +60,13 @@ func BenchmarkFuzzyFinder_GetLocationName_Random_WorldCities(b *testing.B) {
 		_ = fuzzyFinder.GetLocationName(p.Lng, p.Lat)
 	}
 }
+
+func FuzzFuzzyFinder_GetLocationName(f *testing.F) {
+	f.Add(116.3883, 39.9289)
+	f.Fuzz(func(t *testing.T, a float64, b float64) {
+		ret, err := fuzzyFinder.GetLocationNames(a, b)
+		if err == nil && len(ret) == 0 {
+			t.Errorf("bad return %v, %v", ret, err)
+		}
+	})
+}

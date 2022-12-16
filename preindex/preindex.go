@@ -22,7 +22,8 @@ package preindex
 import (
 	"encoding/json"
 	"fmt"
-	"time"
+	"runtime"
+	"sync"
 
 	"github.com/deslittle/pinpoint/convert"
 	"github.com/deslittle/pinpoint/pb"
@@ -30,6 +31,7 @@ import (
 	"github.com/paulmach/orb/maptile"
 	"github.com/paulmach/orb/maptile/tilecover"
 	"github.com/tidwall/geojson/geometry"
+	"github.com/tidwall/lotsa"
 	"golang.org/x/exp/maps"
 )
 
@@ -201,15 +203,18 @@ func PreIndexLocations(input *pb.Locations, idxZoom, aggZoom, maxZoomLevelToKeep
 		AggZoom: int32(aggZoom),
 		Keys:    make([]*pb.PreindexLocation, 0),
 	}
-	for _, loc := range input.Locations {
-		start := time.Now()
-		preindexes, err := PreIndexLocation(loc, idxZoom, aggZoom, maxZoomLevelToKeep, dropEdgeLayger)
-		if err == nil {
-			ret.Keys = append(ret.Keys, preindexes...)
+
+	lock := &sync.Mutex{}
+	lotsa.Ops(len(input.Locations), runtime.NumCPU()*2, func(i, thread int) {
+		tz := input.Locations[i]
+		preindexes, err := PreIndexLocation(tz, idxZoom, aggZoom, maxZoomLevelToKeep, dropEdgeLayger)
+		if err != nil {
+			return
 		}
-		since := time.Since(start)
-		fmt.Println(loc.Name, since)
-	}
+		lock.Lock()
+		ret.Keys = append(ret.Keys, preindexes...)
+		lock.Unlock()
+	})
 	return ret
 }
 
