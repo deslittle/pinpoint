@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	finder, err := pinpoint.NewDefaultFinder()
+	finder, err := pinpoint.NewExampleCombinedFinder()
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +81,7 @@ graph TD
 
     Finder[Finder: Polygon Based Finder]
     FuzzyFinder[FuzzyFinder: Tile based Finder]
-    DefaultFinder[DefaultFinder: combine FuzzyFinder and Compressed Finder]
+    CombinedFinder[CombinedFinder: combine FuzzyFinder and Compressed Finder]
 
     Shp --> |mapbox/shp2geobuf|Geobuf
     Geobuf --> |mapbox/geobuf2json|GeoJSON
@@ -92,8 +92,8 @@ graph TD
 
     Full --> |pinpoint.NewFinderFromPB|Finder
     Lite --> |pinpoint.NewFinderFromPB|Finder
-    Compressed --> |pinpoint.NewFinderFromCompressed|Finder --> |pinpoint.NewDefaultFinder|DefaultFinder
-    Preindex --> |pinpoint.NewFuzzyFinderFromPB|FuzzyFinder --> |pinpoint.NewDefaultFinder|DefaultFinder
+    Compressed --> |pinpoint.NewFinderFromCompressed|Finder --> |CombinedFinder
+    Preindex --> |pinpoint.NewFuzzyFinderFromPB|FuzzyFinder --> |CombinedFinder
 
 ```
 
@@ -108,7 +108,7 @@ the [compressed data(~5MB)][compressd-link] which come from lite data
 will be **more friendly for binary distribution.**
 
 The [preindex data(~1.78MB)][preindex-link] are many tiles.
-It's used inside the `DefaultFinder`, which built on `FuzzyFinder`, to reduce
+It's used inside the `CombinedFinder`, which built on `FuzzyFinder`, to reduce
 raycasting algorithm execution times.
 
 [pb_html]: https://deslittle.github.io/pinpoint/pb.html

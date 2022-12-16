@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	defaultfinder *pinpoint.DefaultFinder
+	defaultfinder *pinpoint.ExampleCombinedFinder
 	fullFinder    *pinpoint.Finder
 )
 
@@ -21,7 +21,7 @@ func init() {
 }
 
 func initLite() {
-	_finder, _ := pinpoint.NewDefaultFinder()
+	_finder, _ := pinpoint.NewExampleCombinedFinder()
 	defaultfinder = _finder
 }
 

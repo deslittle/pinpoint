@@ -8,15 +8,16 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// DefaultFinder is a finder impl combine both [FuzzyFinder] and [Finder].
+// combinedFinder is an example implimentation using the `pinpoint-us-states`
+// repo which combines both [FuzzyFinder] and [Finder].
 //
 // It's designed for performance first and allow some not so correct return at some area.
-type DefaultFinder struct {
+type ExampleCombinedFinder struct {
 	fuzzyFinder *FuzzyFinder
 	finder      *Finder
 }
 
-func NewDefaultFinder() (*DefaultFinder, error) {
+func NewExampleCombinedFinder() (*ExampleCombinedFinder, error) {
 	fuzzyFinder, err := func() (*FuzzyFinder, error) {
 		input := &pb.PreindexLocations{}
 		if err := proto.Unmarshal(usstates.PreindexData, input); err != nil {
@@ -39,7 +40,7 @@ func NewDefaultFinder() (*DefaultFinder, error) {
 		return nil, err
 	}
 
-	f := &DefaultFinder{}
+	f := &ExampleCombinedFinder{}
 	f.fuzzyFinder = fuzzyFinder
 	f.finder = finder
 
@@ -49,7 +50,7 @@ func NewDefaultFinder() (*DefaultFinder, error) {
 	return f, nil
 }
 
-func (f *DefaultFinder) GetLocationName(lng float64, lat float64) string {
+func (f *ExampleCombinedFinder) GetLocationName(lng float64, lat float64) string {
 	fuzzyRes := f.fuzzyFinder.GetLocationName(lng, lat)
 	if fuzzyRes != "" {
 		return fuzzyRes
@@ -75,7 +76,7 @@ func (f *DefaultFinder) GetLocationName(lng float64, lat float64) string {
 	return ""
 }
 
-func (f *DefaultFinder) GetLocationNames(lng float64, lat float64) ([]string, error) {
+func (f *ExampleCombinedFinder) GetLocationNames(lng float64, lat float64) ([]string, error) {
 	fuzzyRes, err := f.fuzzyFinder.GetLocationNames(lng, lat)
 	if err == nil {
 		return fuzzyRes, nil
@@ -83,6 +84,6 @@ func (f *DefaultFinder) GetLocationNames(lng float64, lat float64) ([]string, er
 	return f.finder.GetLocationNames(lng, lat)
 }
 
-func (f *DefaultFinder) LocationNames() []string {
+func (f *ExampleCombinedFinder) LocationNames() []string {
 	return f.finder.LocationNames()
 }

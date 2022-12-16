@@ -8,19 +8,19 @@ import (
 )
 
 var (
-	defaultFinder *pinpoint.DefaultFinder
+	CombinedFinder *pinpoint.ExampleCombinedFinder
 )
 
 func init() {
-	finder, err := pinpoint.NewDefaultFinder()
+	finder, err := pinpoint.NewExampleCombinedFinder()
 	if err != nil {
 		panic(err)
 	}
-	defaultFinder = finder
+	CombinedFinder = finder
 }
 
-func ExampleDefaultFinder_GetLocationName() {
-	finder, err := pinpoint.NewDefaultFinder()
+func ExampleCombinedFinder_GetLocationName() {
+	finder, err := pinpoint.NewExampleCombinedFinder()
 	if err != nil {
 		panic(err)
 	}
@@ -28,10 +28,10 @@ func ExampleDefaultFinder_GetLocationName() {
 	// Output: 34
 }
 
-func BenchmarkDefaultFinder_GetLocationName_Random_WorldCities(b *testing.B) {
+func BenchmarkExampleCombinedFinder_GetLocationName_Random_WorldCities(b *testing.B) {
 	for i := 0; i <= b.N; i++ {
 		//p := gocitiesjson.Cities[rand.Intn(len(gocitiesjson.Cities))]
 		p := struct{ Lat, Lng float64 }{Lat: 40.0786, Lng: 116.6386}
-		_ = defaultFinder.GetLocationName(p.Lng, p.Lat)
+		_ = CombinedFinder.GetLocationName(p.Lng, p.Lat)
 	}
 }
