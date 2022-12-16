@@ -19,11 +19,13 @@ func main() {
 		panic(err)
 	}
 
+	// Parse the json into a BoundaryFile
 	boundaryFile := &convert.BoundaryFile{}
 	if err := json.Unmarshal(rawFile, boundaryFile); err != nil {
 		panic(err)
 	}
 
+	// Convert the boundaryFile to a protobuf
 	output, err := convert.Do(boundaryFile)
 	if err != nil {
 		panic(err)
