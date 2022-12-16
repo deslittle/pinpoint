@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/deslittle/pinpoint/convert"
 )
@@ -30,13 +29,13 @@ type Geometry struct {
 
 func main() {
 
-	if len(os.Args) < 3 {
-		fmt.Println("Usage: geojson2name <geojson file> <propertyKey string>")
+	if len(os.Args) < 4 {
+		fmt.Println("Usage: geojson2name <geojsonin file>  <geojsonin file> <propertyKey string>")
 		return
 	}
 
 	jsonFilePath := os.Args[1]
-	featureId := os.Args[2]
+	featureId := os.Args[3]
 
 	rawFile, err := os.ReadFile(jsonFilePath)
 	if err != nil {
@@ -65,7 +64,7 @@ func main() {
 
 	// Convert back into json
 	outFile, _ := json.Marshal(outFileJson)
-	outputPath := strings.Replace(jsonFilePath, ".json", "-named.json", 1)
+	outputPath := os.Args[2]
 
 	f, err := os.Create(outputPath)
 	if err != nil {
