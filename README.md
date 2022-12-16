@@ -92,9 +92,8 @@ graph TD
 
     Full --> |pinpoint.NewFinderFromPB|Finder
     Lite --> |pinpoint.NewFinderFromPB|Finder
-    Compressed --> |pinpoint.NewFinderFromCompressed|Finder --> |CombinedFinder
-    Preindex --> |pinpoint.NewFuzzyFinderFromPB|FuzzyFinder --> |CombinedFinder
-
+    Compressed --> |pinpoint.NewFinderFromCompressed|Finder --> |pinpoint.NewCombinedFinder|CombinedFinder
+    Preindex --> |pinpoint.NewFuzzyFinderFromPB|FuzzyFinder --> |pinpoint.NewCombinedFinder|CombinedFinder
 ```
 
 The [full data(~80MB)][full-link] could work anywhere but requires more memory usage.
