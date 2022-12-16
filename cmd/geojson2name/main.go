@@ -61,7 +61,6 @@ func main() {
 
 			outFileJson.Features[i].Properties.Name = feature.Properties[featureId].(string)
 		}
-		panic(feature.Properties[featureId])
 	}
 
 	// Convert back into json
